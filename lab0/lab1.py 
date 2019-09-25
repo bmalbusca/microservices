@@ -10,6 +10,8 @@ import os
 dif_list = []
 n_dif = 0;
 
+counter = {}
+
 
 
 def average_input():
@@ -75,6 +77,12 @@ def read_file(filename):
 
 		print(line)
 		list.append(int(line))
+
+		if int(line) in counter: 
+			counter[int(line)] +=1
+		else:
+			counter[int(line)] =1	
+			
 		line = fp.readline()
 		count_new(line)
 
@@ -83,7 +91,7 @@ def read_file(filename):
 	fp.close()
 
 	print("Different numbers: ", n_dif)
-	print(list)
+	print(list, counter)
 	return True
 
 
@@ -91,8 +99,8 @@ def read_file(filename):
 		
 def main():
 
-	print( "average_input() returned",average_input(),"\n")
-	print( "average_20() returned",average_20(),"\n")
+	#print( "average_input() returned",average_input(),"\n")
+	#print( "average_20() returned",average_20(),"\n")
 	print( "read_file() returned", read_file("num_test.txt"),"\n")
 
 
