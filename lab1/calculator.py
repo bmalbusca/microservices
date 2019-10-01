@@ -8,7 +8,6 @@ class  rpnCalculator:
         self.memory = []
 
     def pushValue(self,value=0):
-        print("Will push the value %f" %value)
         insert_top(value, self.memory)
     
     def popValue(self):
