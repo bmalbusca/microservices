@@ -13,5 +13,5 @@ while True:
     try:
         s.send(byte.encode())
     except:
-        print("Broken pipe")
+        print("*Error*")
 
