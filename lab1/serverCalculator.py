@@ -5,7 +5,12 @@ import pickle
 from  socket import *
 from calculator import *
 
-calc = rpnCalculator()
+try:
+    dump_in = open("dump.txt", 'rb')
+    calc = pickle.load(dump_in)
+
+except:
+    calc = rpnCalculator()
 
 s = socket(AF_INET, SOCK_STREAM)
 host = '127.0.0.1'
@@ -36,10 +41,15 @@ while True:
         counter +=1;
    
     except KeyboardInterrupt:
-        print("W: interrupt received, stopping…")
-        dump_out = open("dump.txt ",+w)
+        print("W: interrupt received, saving data...")
+        dump_out = open("dump.txt ","wb")
         pickle.dump(calc ,dump_out)
-        dump_out.close(); 
+        dump_out.close();
+        break
     
 
 c.close()
+
+
+
+
