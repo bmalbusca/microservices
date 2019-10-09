@@ -24,7 +24,6 @@ class bookDB:
         self.books_from_year = {}
         self.backup_directory = os.path.join(THIS_FOLDER, 'backup.txt')
 
-
     def unique(self,new_book):
         if(self.books):
             for book in self.books:
