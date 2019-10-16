@@ -4,24 +4,18 @@ from  classBook import book
 
 Pyro4.config.SERIALIZERS_ACCEPTED.add('pickle')
 
-'''
-remoteDB=Pyro4.expose(bookDB)
-daemon = pyro4.Deamon(..)
-bd =remoteBD()
-uri=daemon.register(bd, "mom")
-print uri
-daemon.requestloop()
-'''
+#@expose as wrapper function:
+book_data = book("Bruno", "1",2,3)
 
 ExposedClass = Pyro4.expose(book)
-#ExposedClass = Pyro4.expose(BookDB)
 db = ExposedClass()
 
 daemon = Pyro4.Daemon()
-uri= daemon.register(db, "book")
+uri2 = daemon.register(book_data,"book") #Send a object (data)
+uri= daemon.register(db, "book_class") #Send bookDB class 
 
-print(uri)
-print("Running")
+print(uri2) #Try also uri 
+print("Running...")
 
 daemon.requestLoop()
 

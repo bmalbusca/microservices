@@ -12,9 +12,11 @@ Every time a book is inserted, the database should be serialized into a backup f
 """
 import pickle
 import os
+import Pyro4
 
 from classBook import *
 
+@Pyro4.expose 
 class BookDB:
     def __init__(self):
         THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
