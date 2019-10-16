@@ -13,7 +13,7 @@ class dbUI:
         self.last_command=None
         self.database =None
     def new_db(self):
-        self.database = bookDB()
+        self.database = BookDB()
     def read(self):
         comm = input("Insert command: ")
         name = comm.split(" ")

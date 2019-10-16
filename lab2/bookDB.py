@@ -15,7 +15,7 @@ import os
 
 from classBook import *
 
-class bookDB:
+class BookDB:
     def __init__(self):
         THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
