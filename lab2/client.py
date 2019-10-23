@@ -15,7 +15,12 @@ print("Testing connection",uri)
 
 book  = Pyro4.Proxy(uri)
 
+#new_book = book  #not callable, you need to use a function class's 
+#new_book.test()
+
 print(" Client: ",book.test(),"\n", "Client: *status* ->",book)
+
+
 
 
 
