@@ -1,0 +1,180 @@
+Secreriat: Secretarias/Bibliotecas
+
+Movel: 3 paginas html basico
+scan dentro da app e depois aparece a info
+
+Info cantina e salas vem do fenix
+Info dos serviços vais estar no log (tem nome, id, descr, horario (tudo texto))
+
+
+1. Que recursos?
+Refeicoes da cantina, dados das salas, ...
+Nome dos recursos, id dos recursos
+
+App vai falar com microservices
+microservicoeS: recebem json (ID) e retornam json (retornam recurso) sem HTML!
+
+Como devem ser os uris das refeiçoes da cantina?
+NAS aulas do REST:
+/rooms/75777 -> retorna json relevante 
+/rooms/7577/exams -> mostra exams dessa sala
+/rooms/7577/exams/11/2019 -> exames desta altura
+
+ fazer isto para toda a info que seja relevante
+
+nos e que definimos o que cada um faz.
+                   
+
+NO caso dos servicos
+/servicos/75777
+
+/canteen/meals/ -> lista todas as refeiçoes
+/canteen/meals/30112019 -> refeicoes desta data
+
+GET, POST, 
+
+PUT - Alterar os servicos
+POST
+GET
+....
+
+
+Cache - lista ligada (refeicao do dia muito accessed)
+
+Pagina web para servir servicos
+
+API REST para app movel
+
+HTML para aceder dados (escrevo servicos/rooms/... e retorna o HTML)
+
+conjunto de paginas que e a app movel (HTML basico 3 paginas ou 1 pagina com 3 "caixas")
+
+no need for Android nem nada disso (so HTML)
+
+mains = flasks a correr = 1 para centina, 1 para servios, 1 para salas (cada microservico tera um flask e um main a correr)
+
+quando se mata um microservico todos os outros micros teem de continuar a funcionar
+
+Admin: gerir os microserviços
+QUando se cria novo micros tenho de fazer o minimo de alteracoes na API, HTML, paginas
+
+(registar novo microservico: vai funcionar tipo um proxy - api apenas os vai "redirecionar")
+
+refeiçoes sao id atraves da data
+rooms atraves de ??
+servicos atraves de ??
+-> podemos ser nos a gerar o id
+
+
+Se ids room = id servicoes temos de conseguir resolver ou so QR Code ou a niel da API (a nivel dos endpoints ou do caminho) - gestao de identificadores
+
+
+ficheiro de configuracao? como ligar endpoints aos microservicos?
+
+1a 3 microservicos
+2a parte basica API HTML
+3ª admin e users 
+
+---
+
+Cantina e rooms - ver que dados temos no fenix
+Ver uris do tecnico
+
+
+"log" - podemos fazer com base de dados ou pickle que vale o mesmo na nota
+django - nao usar
+
+
+---
+RELATORIO
+Vai contar mais do que anos passados - documentar todas as decisoes
+explicar bem no rel:
+definir endpoints 
+pagina do admin o que e que vai fazer
+
+---
+
+autenticacao na mobile app (pagina web) no servidor atraves do fenix
+ist425319
+fenix -> server -> webpage
+
+admin: token/cookie/ou entao mandar user/pass para a frente e para tras que nao vai ser avaliado 
+
+pedidos api sao publicos (sem aut)
+
+web pages so podem ser acedidas se autenticado.
+E preciso partilhar o segredo para se saber a identidade propria (~3semana) - ~mbway levantar moneys
+
+APIs ~automaticas
+
+---
+mudar ao min o sr
+
+trasnformar automaticamente json em HTML -> posso ter de mudar a forma como os dados veem do fenix
+
+<h1> 11111974</h1>
+<h2> almoco</h2>
+<h3> vegetariano</h3>
+	<h4> almondegas... </h4>
+<h3> carne </h3>
+	<h4> almondegas... </h4>
+<h3> peixe </h3>
+	<h4> almondegas... </h4>
+
+ao apresentar a info desta forma fica mais facil converter de json para aqui
+
+nos e que modelamos explicitamente como e que os dados saem e entram API/microservicos
+(justificar no relatorio)
+
+
+cache advantages:
+reduzir tempo de resposta do 2/3/4 pedido
+reduzir carga fenix
+
+Mas se os dados mudam muito frequen. entao nao vale a pena. Ver disso para decidir.
+
+Se houver alteracoes deve dar jeito serem logo repercurtidos nos microser
+PAra menu do dia posso usar cache com uma f de refrescamento menor
+PAra menu de há mais tempo é por em cache 
+
+3 micro = 3 pythons = 3 mains
+
+---
+implementar o site dos books
+
+definir endpoints e ids
+
+---
+flask = servidor web = serve pedidos rest
+
+usar ainda js 
+----
+mine:
+REST requests, API, Flask webpages
+
+--
+run on flask server
+como ler o QR code mesmo sem mobile app - most users teem qr app ja instalado mas caso isso nao aconteca como e que o bacano le o qr?
+
+Como ter QR code que funcione para os 2 casos?
+
+como ir buscar o id da sala para ver o horario?
+QR codes - obtem se id da sala -> get schedule
+
+nao ha necessidae de traducao do nome da sala para o respectivo id, do qr code vem o id e o sistema sabe qual o horario correspodente
+
+Enpoints: 
+/canteen/...
+/secretariats/...
+/rooms/...
+
+novo tipo de servico, o tipo de endpoit exportado sera /exams/...
+cada micros exporta uma API começada por /e...
+
+entao HTML tenho de ter "uma tabela" para poder saber que:
+/canteen/ -> httt/... 5000 (ou harcoded ou é uma config)
+API -> recebe /canteen/... -> faz lookup do uri e goes
+
+server nao e um broker mas sim um proxy
+
+---
