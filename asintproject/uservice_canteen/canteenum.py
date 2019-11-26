@@ -1,6 +1,17 @@
 from flask import Flask , redirect, url_for, request, render_template
+import requests as req
+import json
+
+
 app = Flask(__name__)
 
+API_canteen = "https://fenix.tecnico.ulisboa.pt/api/fenix/v1/canteen"
+
+@app.route('/api', methods = ['GET', 'POST'] )
+def api():
+    resp = req.get(API_canteen)
+    #print(resp.json())
+    return resp.json()
 
 # aka my first flask code
 @app.route('/fail/<name>')
