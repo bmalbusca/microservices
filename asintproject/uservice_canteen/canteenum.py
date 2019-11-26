@@ -1,4 +1,4 @@
-from flask import Flask , redirect, url_for, request, render_template
+from flask import Flask , redirect, url_for, request, render_template, jsonify
 import requests as req
 import json
 
@@ -11,7 +11,7 @@ API_canteen = "https://fenix.tecnico.ulisboa.pt/api/fenix/v1/canteen"
 def api():
     resp = req.get(API_canteen)
     #print(resp.json())
-    return resp.json()
+    return jsonify(resp.json())
 
 # aka my first flask code
 @app.route('/fail/<name>')
