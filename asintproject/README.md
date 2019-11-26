@@ -4,7 +4,7 @@
 > 
 > - https://fenixedu.org/dev/api/#get-canteen (API canteen - Json)
 >
-> *example*
+> *@example:~*
 > ``` curl -X GET -H 'Content-Type: application/json' https://fenix.tecnico.ulisboa.pt/api/fenix/v1/canteen ```
 >
 - https://github.com/xpmatteo/flask-microservice (Json vs Flask example)
@@ -19,8 +19,8 @@
 - https://www.geeksforgeeks.org/python-using-for-loop-in-flask/ (HTML vs Flask)
 - https://medium.com/octopus-wealth/returning-json-from-flask-cf4ce6fe9aeb (Return JSON to HTML)
 
-=======================================
+------------
 
-### Project Dev progress
+# Project Dev progress :memo:
 
-- [ ] canteen microservice  - Bruno Figueiredo (DOING)
+1. - [ ] canteen microservice  - Bruno Figueiredo (DOING)
