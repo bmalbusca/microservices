@@ -1,4 +1,4 @@
-## Project API IST fenix 
+#Project API IST fenix 
 
 #### Web links (cool things bro)
 > 
@@ -18,7 +18,9 @@
 - https://auth0.com/blog/developing-restful-apis-with-python-and-flask/ (Ultra complete example - w/ Auth0)
 - https://www.geeksforgeeks.org/python-using-for-loop-in-flask/ (HTML vs Flask)
 - https://medium.com/octopus-wealth/returning-json-from-flask-cf4ce6fe9aeb (Return JSON to HTML)
-
+- https://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask/page/5 (API POST)
+- https://towardsdatascience.com/flask-an-easy-access-door-to-api-development-2147ae694ceb (More POST and GET)
+- https://realpython.com/python-json/ (json to python DataTypes)
 ------------
 
 # Project Dev progress :memo:

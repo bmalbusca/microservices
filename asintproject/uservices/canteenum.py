@@ -1,17 +1,60 @@
 from flask import Flask , redirect, url_for, request, render_template, jsonify
 import requests as req
 import json
-
-
-app = Flask(__name__)
+import datetime
 
 API_canteen = "https://fenix.tecnico.ulisboa.pt/api/fenix/v1/canteen"
 
+class MenuDB(object):
+    def __init__(self, url, date=None, data_json=None):
+        self.data = data_json
+        self.data_time = date  
+        self.url_api = url 
+        
+        self.tomorrow  = None 
+        self.today = None 
+    
+    def update(self,request):
+        self.data = self.json_to_py(request)
+    
+    def request_new_url(self, url):        
+        self.data = self.json_to_py(req.get(url).text)
+
+    def request_new(self):        
+        self.data = self.json_to_py(req.get(self.url_api).text)
+        
+    def json_to_py(self, json_file):
+        return json.loads(json_file)
+    
+    def print_json(self):
+        print(type(self.data))
+        print(self.data[0]["day"]) 
+
+### STATELESSS QUANDO BACKEND PODE FAZER-LO DIRECTAMENTE  - QUAL A DIFERENCE
+### FAZ SENTIDO  FAZER GET A CADA VEZ QUE SE FAZ UM PEDIDO AO MICROSERVICE
+### IDEIA DE TER UM INFORMACAO GUARDADA - DEIXAR O STATELESS 
+
+## FAZ TRATAMENTO (MANDAR O QUE FOR  PRECISO) DO JSON OU MANDAR RAW PARA O BACKEND
+
+# NO CASO DA SECRETARIA JA NAO VAI DAR
+
+
+app = Flask(__name__)
+menu= MenuDB(API_canteen)
+
+
+
 @app.route('/api', methods = ['GET', 'POST'] )
-def api():
+def api(): 
     resp = req.get(API_canteen)
-    #print(resp.json())
+    menu.update(resp.text)
+    menu.print_json()
+    menu.request_new()
     return jsonify(resp.json())
+
+@app.route('/menu', methods = ['GET','POST'] )
+def menu_api():
+    return json.dumps(menu.data)
 
 # aka my first flask code
 @app.route('/fail/<name>')
