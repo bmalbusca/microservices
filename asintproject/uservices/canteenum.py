@@ -6,16 +6,13 @@ import datetime
 API_canteen = "https://fenix.tecnico.ulisboa.pt/api/fenix/v1/canteen"
 
 class MenuDB(object):
-    def __init__(self, url, date=None, data_json=None):
-        self.data = data_json
-        self.data_time = date  
-        self.url_api = url 
-        
+    def __init__(self, url, date=None, data_json=None, menu= {}):
+        self.data = data_json #nao faz sentido guardar isto
+        self.data_time = date #nao faz  sentido 
+        self.url_api = url
+        self.menu = menu     
         self.tomorrow  = None 
         self.today = None 
-    
-    def update(self,request):
-        self.data = self.json_to_py(request)
     
     def request_new_url(self, url):        
         self.data = self.json_to_py(req.get(url).text)
@@ -29,32 +26,52 @@ class MenuDB(object):
     def print_json(self):
         print(type(self.data))
         print(self.data[0]["day"]) 
+    
+    def parse_json(self):
+        for day in self.data:
+            if day not in self.data.key():
+                self.menu[day["day"]]  = day["meal"]
 
-### STATELESSS QUANDO BACKEND PODE FAZER-LO DIRECTAMENTE  - QUAL A DIFERENCE
-### FAZ SENTIDO  FAZER GET A CADA VEZ QUE SE FAZ UM PEDIDO AO MICROSERVICE
-### IDEIA DE TER UM INFORMACAO GUARDADA - DEIXAR O STATELESS 
+    
+    def ifexist_menu(self, date):
+        if date in self.menu.keys():
+            return self.menu[date]
+        else:
+            request_new()
+            parse_json()
+            return self.menu[date]
+            
+            
 
-## FAZ TRATAMENTO (MANDAR O QUE FOR  PRECISO) DO JSON OU MANDAR RAW PARA O BACKEND
 
-# NO CASO DA SECRETARIA JA NAO VAI DAR
+        
+
+    
 
 
 app = Flask(__name__)
 menu= MenuDB(API_canteen)
 
-
+@app.errorhandler(404)
+def page_not_found(e):
+    return  'Page not found', 404
 
 @app.route('/api', methods = ['GET', 'POST'] )
 def api(): 
     resp = req.get(API_canteen)
-    menu.update(resp.text)
-    menu.print_json()
     menu.request_new()
     return jsonify(resp.json())
 
 @app.route('/menu', methods = ['GET','POST'] )
 def menu_api():
     return json.dumps(menu.data)
+
+
+
+
+@app.route('/<date>', methods = ['GET', 'POST'])
+def show(date="none"):
+    return json.dumps(list(menu.data[date]))
 
 # aka my first flask code
 @app.route('/fail/<name>')
