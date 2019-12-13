@@ -1,3 +1,30 @@
+
+1. - [ ] uservices 
+> 
+> - [ ] rooms 
+> - [ ] canteen
+> - [ ] secretaria 
+> - [ ] database 
+
+2. - [ ] API
+>
+> - [ ] User Fenix
+> - [ ] Autentication Admin
+> - [ ] Web pages Forms
+
+
+3. - [ ] QR
+>
+> - [ ] Send URLs
+> - [ ] User validation - my secret
+     
+
+      
+
+
+
+
+
 Git    :wavy_dash:
 -------------
 
