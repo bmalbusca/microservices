@@ -12,7 +12,6 @@ Things to be done:
     1. Order the dict keys by datetime 
     2. Check if is need to search entire dict 
     3. Manage the dict size 
-    4. Request for a specific day: https://fenix.tecnico.ulisboa.pt/api/fenix/v1/canteen/?day=21/02/2014
 """
 
 

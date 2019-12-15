@@ -21,7 +21,6 @@ class Rooms(object):
     def request_url(self, id):
         today = date.today()
         uri = self.url+ "/" + str(id)+ "/" + today.strftime("%d/%m/%Y")
-        print(uri)
         return self.json_to_py(req.get(self.url+ "/" + str(id)+ "?day=" + today.strftime("%d/%m/%Y")).text)
 
     def json_dump(self, data ):
