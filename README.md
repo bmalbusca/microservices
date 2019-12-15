@@ -13,7 +13,7 @@
 > - [ ] Web pages Forms
 
 
-3. - [ ] QR
+3. - [x] QR
 >
 > - [ ] Send URLs
 > - [ ] User validation - my secret

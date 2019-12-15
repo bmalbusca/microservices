@@ -1,0 +1,26 @@
+<!DOCTYPE html> <!-- Instruction to web browser bcs HTML4 was based no SGMarkup Language --> 
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"> <!-- Specifies the character encoding the document -->
+   			<title> Admin page - Log Info </title>
+		</head>
+		<body>
+			<!-- List logs
+					Log: service will receive and store all accessess to:
+						Backend(web and REST accesses)
+						Rooms microservice
+						Secretariat microservice
+						Canteen microservice
+						Authentication
+			-->
+
+			<!-- https://www.tutorialspoint.com/flask/flask_sending_form_data_to_template.htm 
+				Jinja as the templating framework: https://stackoverflow.com/questions/14652325/python-dictionary-in-to-html-table/14656262
+		-->
+			{ % for item in list %}
+			<ul>
+				<li> {{item}} <!-- <a href="{{item}}"> /listLogs?list={{item}} --> </li>
+			</ul>
+			{% endfor %}
+		</body>
+	</html>

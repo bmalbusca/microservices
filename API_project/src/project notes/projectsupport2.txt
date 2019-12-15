@@ -1,0 +1,96 @@
+Servicos tem um base de dados
+
+Rooms and Canteens falam com o tencico
+
+
+Backend:
+	3 modulos (3 tipos de interacoes diferentes)
+		1 API (REST) - para esconder os microservicos agrega los e permitir a aplicacao movel
+			API e um proxy 
+			API/canteen/11112019 -> API redireciona para o microservico
+			API/rooms/
+
+		1 conjunto de paginas HTML
+		web pages de Admin : pass e user admin admin 
+
+admin authentication usar o flask: user and pass - admin and admin 
+depois so volto a ter auth na parte dos servicos
+
+
+aplicacao movel fica para a proxima semana 
+	interage por REST com a API
+
+adicionar um novo microservico:
+	descrever como se adicionaria um 4 
+	reescrever/ficheiro de config/base de dados? escolher 1 destas e justificar 
+	ifs na API (mais simples)
+				rooms - 127...:500
+				canteen - 127...:600
+								formularios (mais complexo)
+
+pagina de Admin:
+	funcionalidades: load logs + carregar ficheiro config + add and edit
+
+outro servico chamado log:
+	guardar todos os pedidos
+	flask deve dar para executar uma funcao nossa cada vez que reeba um pedido
+
+como migrar para a cloud?? Melhor evitar pickle
+servico chave valor para ter uma base de dados nao num ficheiro
+
+[o prof vai ajudar para o report]
+memcache - cache distribuida - nao e preciso implementar mas por no relatorio
+	pick your own tech 
+
+
+Cache canteen:
+	tentar ler valor que nao esta na cache (miss) ele vai aceder a memoria e se essa data nao estiver no fenix da excepcao (retorna 404 aka resposta de erro)
+	entao guardar na cache que essa data e null
+
+stateless REST é nao guardar info das interaçoes com os clientes
+	ele pode ter cache babe
+
+definir o que retornar quando o recurso nao existe
+	retornar 404
+
+id e dado pelo qr code (pode ser ou nao igual ao do fenix (nos e que decidimos))
+id das refeicoes sao as datas
+id das sals: fenix
+id dos servicos: o nosso sistema (pode ser o microserviço)
+
+o que acontece se houver um servico com o mesmo id de uma sala??
+	por o qr code a dizer se e servico ou sala (podemos por uma distincao num nivel intermedio)
+
+ 
+
+python que gera o html vai buscar os dados ou ao servico dos rooms ou entao vai a API (que depois vai aos rooms)
+	API e um proxy (redireciona)
+
+
+Inserir novo item do microservico
+admin poe nome 
+poe url (do microservico)
+
+nao posso ter uma route para cada um deles, tenho de ter um if
+
+/api/qq ocisa
+	ver primeira coisa com base nistto vai a tavela
+	pega no resto e depois envia para o microservico
+
+definir dinamicamente as rotas 
+@app.route('/api/<str>')
+def fgenerica(str)
+
+str= canteen/1112019
+vai ter de partir isto em 
+canteen e /111112019
+
+url = tabela[]
+sendo a tabela um dicionario guardado como pickle que me da entre /canteen a match com o endereco do recurso
+
+assim adicionando um novo microservico e so adicionar a tabela 
+
+
+
+	
+
