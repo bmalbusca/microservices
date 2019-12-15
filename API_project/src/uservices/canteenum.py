@@ -35,9 +35,6 @@ def api():
     resp = req.get(API_canteen)
     return jsonify(resp.json())
 
-@app.route('/menu', methods = ['GET','POST'] )
-def menu_api():
-    return menu.dump()
 
 @app.route('/', methods = ['GET','POST'] )
 def link():
