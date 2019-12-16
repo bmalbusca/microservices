@@ -21,6 +21,7 @@ app = Flask(__name__)
 
 menu= Menu(API_canteen)
 menu.add_menu()
+menu.order()
 
 
 

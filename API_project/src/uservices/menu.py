@@ -1,7 +1,8 @@
 from flask import Flask , request, jsonify
 import requests as req
 import json
-from datetime import * 
+from datetime import *
+from collections import OrderedDict
 
 """
     @Class Menu 
@@ -10,7 +11,7 @@ from datetime import *
 """
 
 class Menu(object):
-    def __init__(self, url,  menu= {}):
+    def __init__(self, url,  menu= OrderedDict() ):
         self.url_api = url
         self.menu = menu
 
@@ -36,8 +37,11 @@ class Menu(object):
         return json.dumps(dic)
 
     def order(self):
-        self.menu = sorted(self.menu.items(), key = lambda x:datetime.strptime(x[0], '%d/%m/%Y'), reverse=True)
-
+        #list = sorted(self.menu.items(), key = lambda x:datetime.strptime(x[0], '%d/%m/%Y'), reverse=True)
+        #for i in list:
+        #    print(list, "\n")
+        #print( {k:v for k in sorted(s.items(), key=self.menu.keys())}) 
+    
     def find(self, key):
         if key in  self.menu.keys():
             return self.data_dump(self.menu[key])

@@ -1,9 +1,9 @@
 
 1. - [ ] uservices 
 > 
-> - [ ] rooms 
-> - [ ] canteen
-> - [ ] secretaria 
+> - [X] rooms 
+> - [ ] canteen - Missing Cache management 
+> - [ ] secretaria - [DOING]
 > - [ ] database 
 
 2. - [ ] API
