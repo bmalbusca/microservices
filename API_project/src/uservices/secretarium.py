@@ -16,13 +16,17 @@ class Database(object):
 
     def insert(self, data):
         try:
+            for setdata in self.database["secretariats"]:
+                if setdata["name"] == data["name"] and  setdata["location"] == data["location"]:
+                    return
             self.database["secretariats"].append(data)
+
         except:
             print("Database not defined")
     
-    def find(self, name):
+    def find(self, name, local):
         for data in self.database["secretariats"]:
-            if name == data["name"]:
+            if name == data["name"] and local == data["location"] :
                 return data
             else:
                 return None
@@ -41,10 +45,13 @@ class Database(object):
     def printDB(self):
         print(self.database)
 
+    def dump(self):
+        return json.dumps(self.database)
+
     
 
 
-db = Database()
+db = Database(datab)
 db.printDB()
 
 db.insert(secretariat)

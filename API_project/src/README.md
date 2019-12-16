@@ -22,5 +22,6 @@
 - https://towardsdatascience.com/flask-an-easy-access-door-to-api-development-2147ae694ceb (More POST and GET)
 - https://realpython.com/python-json/ (json to python DataTypes)
 - https://www.sicara.ai/blog/2018-05-25-build-serverless-rest-api-15-minutes-aws (AWS Json)
+- https://sysadmins.co.za/basic-restful-api-server-with-python-flask/ (Database Flask)
 ------------
 
