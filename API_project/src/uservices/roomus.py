@@ -41,10 +41,9 @@ def link():
     return "Rooms API v1.1"
 
 
-@app.route('/room/<path:subpath>')
+@app.route('/room/<subpath>')
 def find(subpath):    
     resp = room.request_url(subpath)
-    #print(resp, type(resp))
     
     if 'error' in resp:
         abort(404)

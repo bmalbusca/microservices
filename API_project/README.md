@@ -13,6 +13,7 @@ API_project/src/
 		| - secretarius port=5002 path=/secretariat/<Name>/<Local>
 ```
 
-
-
- > [links](https://github.com/bmalbusca/ASIT/blob/master/API_project/src/README.md)
+>
+> canteenus API returns a dict with 2 keys: lunch(can be a array) and dinner
+> 
+> [links](https://github.com/bmalbusca/ASIT/blob/master/API_project/src/README.md)

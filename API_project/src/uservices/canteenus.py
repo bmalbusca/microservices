@@ -13,7 +13,10 @@ Things to be done:
     2. Check if is need to search entire dict 
     3. Manage the dict size 
 """
-
+#@app.route('/api', methods = ['GET', 'POST'] )
+#def api(): 
+#    resp = req.get(API_canteen)
+#    return jsonify(resp.json())
 
 API_canteen = "https://fenix.tecnico.ulisboa.pt/api/fenix/v1/canteen"
     
@@ -23,17 +26,9 @@ menu= Menu(API_canteen)
 menu.add_menu()
 
 
-
-
-
 @app.errorhandler(404)
 def page_not_found(e):
     return  "Sorry, source not available.", 404
-
-@app.route('/api', methods = ['GET', 'POST'] )
-def api(): 
-    resp = req.get(API_canteen)
-    return jsonify(resp.json())
 
 
 @app.route('/', methods = ['GET','POST'] )

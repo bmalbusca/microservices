@@ -97,7 +97,7 @@ def insert(subpath):
     req = request.get_json()
     # set(d_1.keys()) == set(d_2.keys()) check if have the same type
     if not req: 
-        return make_response(jsonify({"error": "Missing data for insert "+str(keys[0])+ "," + str(keys[1]) + "€ database" }), 400)
+        return make_response(jsonify({"error": "Missing data for insert "+str(keys[0])+ "," + str(keys[1]) + "@database" }), 400)
 
 
 

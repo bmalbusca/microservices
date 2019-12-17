@@ -1,4 +1,4 @@
-from flask import Flask , request, jsonify
+from flask import Flask , request, jsonify, make_response
 import requests as req
 import json
 from datetime import *
@@ -12,7 +12,7 @@ from collections import OrderedDict
 
 class Menu(object):
     def __init__(self, url,  menu= OrderedDict() ):
-        self.url_api = url
+        self.url_api = url 
         self.menu = menu
 
     def request_url(self, url):
@@ -33,9 +33,10 @@ class Menu(object):
                 if day["day"] not in self.menu.keys():
                     self.menu[day["day"]] = day["meal"] 
     
-    def data_dump(self, dic):
-        return json.dumps(dic)    
-    
+    def data_dump(self, dic): #return json.dumps(dic)   
+      
+        return make_response(jsonify({dic[0]["type"]:dic[0]["info"], dic[1]["type"]:dic[1]["info"]}))
+
     def find(self, key):
         if key in  self.menu.keys():
             return self.data_dump(self.menu[key])
