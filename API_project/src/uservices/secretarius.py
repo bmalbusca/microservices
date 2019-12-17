@@ -7,6 +7,8 @@ from datetime import *
 datab = { "secretariats" : [ {"location": "Alameda" , "name": "DA" , "description": "Direcao academica" , "time":"9:30 - 17:00" }  
             ]}
 
+
+# add this to the  object class - for comparison 
 secretariat = {"location": "Alameda" , "name": "DA" , "description": "Direcao academica" , "time":"9:30 - 17:00" }  
 
 
@@ -76,11 +78,13 @@ def page_not_found(e):
 def link():
     return "Secretariats API v1.1"
 
-# remove GET option 
+###############################################################################################
 #
-# requests.post("http://127.0.0.1:5000/quarks", json={"name":"top","charge":"+2/3"})
+#   requests.post("http://127.0.0.1:5000/quarks", json={"name":"top","charge":"+2/3"})
 #
-#  curl -X GET http://127.0.0.1:5000/insert/DA/Alameda -H 'Content-Type: application/json'   -d '{"location": "Alameda" , "name": "DA" , "description": "Direcao academica" , "time":"9:30 - 17:00" }'
+#   curl -X GET http://127.0.0.1:5000/insert/DA/Alameda -H 'Content-Type: application/json'   -d '{"location": "Alameda" , "name": "DA" , "description": "Direcao academica" , "time":"9:30 - 17:00" }'
+#
+################################################################################################
 
 @app.route('/insert/<path:subpath>', methods = ['GET','PUT'])
 def insert(subpath):
@@ -91,8 +95,10 @@ def insert(subpath):
     
     # name/local  - primary keys 
     req = request.get_json()
+    # set(d_1.keys()) == set(d_2.keys()) check if have the same type
     if not req: 
         return make_response(jsonify({"error": "Missing data for insert "+str(keys[0])+ "," + str(keys[1]) + "€ database" }), 400)
+
 
 
     status = db.insert(req)
@@ -106,6 +112,8 @@ def insert(subpath):
     else:
         abort(404)
 
+
+# http://127.0.0.1:5000/DA/Alameda >> name/local
 @app.route('/<path:subpath>', methods = ['GET','POST'])
 def find(subpath):
     

@@ -10,4 +10,4 @@
 		| - secretarius
 ```
 
-[links] (https://github.com/bmalbusca/ASIT/blob/master/API_project/src/README.md)
+[links](https://github.com/bmalbusca/ASIT/blob/master/API_project/src/README.md)
