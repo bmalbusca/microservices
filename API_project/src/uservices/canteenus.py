@@ -21,7 +21,7 @@ app = Flask(__name__)
 
 menu= Menu(API_canteen)
 menu.add_menu()
-menu.order()
+
 
 
 
@@ -52,5 +52,5 @@ def find(subpath):
 
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(host='0.0.0.0', port = '5000', debug = True)
     pass

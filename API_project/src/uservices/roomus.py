@@ -41,10 +41,10 @@ def link():
     return "Rooms API v1.1"
 
 
-@app.route('/<path:subpath>')
+@app.route('/room/<path:subpath>')
 def find(subpath):    
     resp = room.request_url(subpath)
-    print(resp, type(resp))
+    #print(resp, type(resp))
     
     if 'error' in resp:
         abort(404)
@@ -52,7 +52,7 @@ def find(subpath):
         return room.json_dump(resp)
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(host='0.0.0.0', port = '5001',debug = True)
     pass
 
 

@@ -114,7 +114,7 @@ def insert(subpath):
 
 
 # http://127.0.0.1:5000/DA/Alameda >> name/local
-@app.route('/<path:subpath>', methods = ['GET','POST'])
+@app.route('/secretariat/<path:subpath>', methods = ['GET','POST'])
 def find(subpath):
     
     keys = str(subpath).split("/")
@@ -127,7 +127,7 @@ def find(subpath):
 
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(host='0.0.0.0', port = '5002',debug = True)
     pass
 
 

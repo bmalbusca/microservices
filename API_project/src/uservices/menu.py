@@ -25,22 +25,16 @@ class Menu(object):
         return json.loads(json_file)
 
     def add_menu(self, data={}): 
-        if not data:
-            data = self.request()
+        if not data: #adding only one day menu otherwise fill the cache with entire week menus
+            data = self.request() 
 
         if (data): 
-            for day in data:
+            for day in data: # comes as a list 
                 if day["day"] not in self.menu.keys():
                     self.menu[day["day"]] = day["meal"] 
     
     def data_dump(self, dic):
-        return json.dumps(dic)
-
-    def order(self):
-        #list = sorted(self.menu.items(), key = lambda x:datetime.strptime(x[0], '%d/%m/%Y'), reverse=True)
-        #for i in list:
-        #    print(list, "\n")
-        #print( {k:v for k in sorted(s.items(), key=self.menu.keys())}) 
+        return json.dumps(dic)    
     
     def find(self, key):
         if key in  self.menu.keys():
