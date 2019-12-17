@@ -1,5 +1,5 @@
 
-1. - [ ] uservices  - need to  uniformizing all REST error responses
+1. - [ ] uservices  - need to  uniformizing all REST error responses  (404,40x) and error when the uservice is offline 
 > 
 > - [X] rooms - Add codes for success case (20X); separate into object class file
 > - [X] canteen - Missing Cache management 

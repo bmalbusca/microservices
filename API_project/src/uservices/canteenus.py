@@ -39,7 +39,7 @@ def link():
 @app.route('/menu/<path:subpath>')
 def find(subpath):
     resp = menu.find(str(subpath))
-    
+  
     if  resp == 404:
         return abort(resp)
     else:
@@ -47,5 +47,5 @@ def find(subpath):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port = '5000', debug = True)
+    app.run(host='0.0.0.0', port = '5003', debug = True)
     pass

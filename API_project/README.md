@@ -8,7 +8,7 @@ API_project/src/
 	| - web_pages
      	| - mobile_app
      	| - uservices/
-   		| - canteenus 	port=5000 path=/menu/<date:d/m/YEAR>
+   		| - canteenus 	port=5003 path=/menu/<date:d/m/YEAR>
 		| - roomus 	port=5001 path=/room/<id>
 		| - secretarius port=5002 path=/secretariat/<Name>/<Local>
 ```
