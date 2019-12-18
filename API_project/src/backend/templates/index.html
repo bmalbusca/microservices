@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+	<body>
+		<h1> Fenix API V1.0 </h1>
+	
+		<div>
+		{% for key, value in proxies.items() %}		
+		<p><a href= {{value}}> {{key}} </a></p>
+		{% endfor %}	
+		</div>	
+	</body>
+</html>

@@ -38,6 +38,7 @@ def link():
 
 @app.route('/menu/<path:subpath>')
 def find(subpath):
+    print("Received", subpath)
     resp = menu.find(str(subpath))
   
     if  resp == 404:
