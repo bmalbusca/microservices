@@ -1,0 +1,157 @@
+lab#4:
+
+ele verifica se o segredo é o correspondente ao de quem esta logged in na app de insercao do segredo
+
+(se alguem puser o segredo valido mas d eoutro user entao da mal)
+
+guardar numa base de dados no backend com keys de nomes de microserviços (dinamico)
+quando o prof mete um url diferente tem de ir para uma cena generica que guarda essa base de dados como texto
+
+e depois o valor desse url
+
+form:
+metes nome e ip
+
+um admin pode criar um micro serviço
+tens de guardar o url 
+
+para criar route generica ver a cena do subpath 
+
+gerar html para imprimir
+_> funcao recursiva em que o python gerava o html em strnig e depois guardavas a string num ficheiro
+
+json to html 
+
+para o admin basta uma var e guardar
+
+
+browser -> url code -> fenix
+
+----------------------------
+labs passados:
+no 1 lab - microservicos
+
+2 dos microservicos falam com o fenix
+
+cada um deles retorna apenas dados
+porque nao sei como os vou usar (abstracao de dados) - > sem pensar em como eles vai ser usados
+
+depois no 2 lab seria para fazer 2 coisas independetnes (sem menus)
+
+api que recebe pedido rest e faz 3 ou 4 pedidos rest 
+recebe json dos micros e retorna json
+
+no need for paginas com formularios
+
+api e um proxy
+
+-----
+paginas html que vao fazer pedidios rest a api e voa apresentar html 
+com o codigo de transformacao da biblioteca que o prof deu
+
+para nenhum destes era preciso menus nem forms
+
+os urls da pagina de html vao vir dos qr codes que sera o que eu vou por na porta para poder usar sem app
+------------------------
+app de admin
+tem login 
+****
+gestao das secretarias (estas nao comunicam com o fenix) - comunica com esse microservico
+
+tem uma serie de paginas html
+
+*********
+app movel 
+(tem no browser jscript)
+js: camera e um pedido que diz da me a info do id que esta no qr code
+js para carregar no botao dar os egredo
+js para depois de escrever o segredo na caixinha, me dar a foto
+
+js faz um pedido rest que a app movel faz a api e recebe os dados
+
+no caso de mostrar a foto
+
+js faz get secret, a app retorna 777 
+
+a app movel vai usar outros htmls
+--------------------------------
+
+
+no main do backend por comments a separar:
+paginas do admin
+endpoints do api
+endpoints do html
+endpoitns da app movel
+
+mesmo que nao sejam app diferntes temos de as tentar como implementadas como independetes
+
+--------------------------------
+
+paginas html e so a definicao dos urls, dos endpoints, nao 
+
+
+--------------------------------
+url pode ir para a pagina html
+
+na app movel ele quando acede
+
+
+
+******************
+
+qr code: na mesma pagina da camera, sem fazer reload fazer 2pedidos, um a api e outro ao html
+
+parte se o url aos bocadinhos e faz se o pedido a api 
+js leu o url e ja consegues ler o url (uma string) - o fim do html deve ser igual ao fim da api, pegas nesse fim e faz se um pedido rest em vez de um redirect
+
+podemos ter uma caixinha em que mostramos os resutlados do 1 pedido aka o json
+e por baixo outra cauxa em que mostramos os resultados do 2 epdido e mostramos o html
+
+
+******************
+novo microservico do shuttle e registo na minha api esse novo serviço
+
+registo o url do novo microservico
+
+pedido: /salas/xxxx
+sabe que o xxxx e para um determinado microservico porque tem a sala
+xpto/xxxx
+ele vai a uma tabela e sabe que o salas é o ...:5000 e o xpto e o ...:7000
+
+a dos secretariados nao se sabe onde esta armazenada nem se sabe a tecnologia - so sabemos que a podemos aceder artaves de base de dados
+----
+
+******************
+flask https -> da para configurar como https 
+
+
+noa e preciso logout
+
+
+mobile app
+javascript
+api
+
+carinafernandes.479@gmail.com
+quando se recebe o token faz se log in do user
+
+-------------
+
+login management
+log user from request
+
+api_key request authorizartion
+
+se existir: return user carinafernandes.479@gmail.com
+qual e o user associado aquela chave
+
+-------------
+
+
+
+
+
+
+
+
+
