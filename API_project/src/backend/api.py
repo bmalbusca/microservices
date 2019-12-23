@@ -116,6 +116,29 @@ def insert_set():
 
 
 
+@app.route('/changeSecretariat', methods= ['POST'])
+def insert_set():
+     if request.method == 'POST':
+       
+        name = request.form['name']
+        local = request.form['local']
+        desc = request.form['des']
+        h = request.form['hours']
+
+        add = "http://"+str(public_ip)+":5002/insert/" +str(name)+"/"+str(local)
+       
+       
+        data = req.put(add, headers = {'Content-type': 'application/json'}, json={"location": str(local), "name": str(name) , "description": str(desc) , "time":h } ).text
+        temporary_log.append(logs.message(add))
+        return json2html.convert(json = data)
+    
+    else:
+
+        return redirect(url_for('menu'))
+    
+
+
+
 
 @app.route('/menu/search', methods= ['POST'])
 def menu_search():
