@@ -4,7 +4,6 @@ from flask import request
 from flask import render_template
 from flask import redirect
 from flask import jsonify
-
 import os
 
 app = Flask(__name__) # create an instance of the Flask class for the web app
@@ -34,9 +33,9 @@ def logoutAdmin():
 
 ##### list logs
 
-#####
+##### create new microservices
 
- 
+
 # Python assigns the name "__main__" to the script when the script is executed.
 if __name__ == '__main__':
 	app.secret_key = os.urandom(12) #generate a random key to keep the session safe

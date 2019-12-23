@@ -78,10 +78,10 @@ a app movel vai usar outros htmls
 
 
 no main do backend por comments a separar:
-paginas do admin
-endpoints do api
+paginas do admin (aka o nosso admin.py)
+endpoints do api (api.py)
 endpoints do html
-endpoitns da app movel
+endpoitns da app movel 
 
 mesmo que nao sejam app diferntes temos de as tentar como implementadas como independetes
 

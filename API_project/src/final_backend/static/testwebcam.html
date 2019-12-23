@@ -17,12 +17,15 @@
       //scanner.addListener('scan', function (content) {
 
         //////////////////////// a apagar - so para testar!//////////
-        inQR = "/secretariat/search"
-        host = "0.0.0.0"
-        http = "http://"
-        port = "5000"
-        content = http.concat(host).concat(":").concat(port).concat(inQR)
-        ///////////////////////
+        inQR = "/api/secretariat/DA/Alameda";
+
+        //http://194.210.135.122:5000/secretariat/search
+
+        host = "0.0.0.0";
+        http = "http://";
+        port = "5002";
+        content = http.concat(host).concat(":").concat(port).concat(inQR);
+        //////////////////////////////////////////////
 
         //console.log(content)
         //console.log(typeof content) // content is of type string
@@ -35,11 +38,23 @@
           success: function(response){
             console.log(response)
             console.log("it worked");
-        }
+/*
+            $.each(response, fuhttp://0.0.0.0:5000/snction(index, element) {
+            $('body').append($('<div>', {
+                text: element.name
+            }));
+            });*/
+            var json = $.parseJSON(response);
+            $(json).each(function (i, val) {
+              $.each(val, function (k, v) {
+                $('#div_a').append('<div id="r'+ k + " : " + v +'" class="ansbox"></div>')
+              });
+          }); 
+          }
         });
       //});
       
-     /* Instascan.Camera.getCameras().then(function (cameras) {
+     Instascan.Camera.getCameras().then(function (cameras) {
         if (cameras.length > 0) {
           scanner.start(cameras[0]);
         } else {
@@ -47,9 +62,10 @@
         }
       }).catch(function (e) {
         console.error(e);
-      });*/
+      });
     </script>
     <!-- ====================== JS ====================== -->
+    <div id="div_a"></div>
 
     
   </body>

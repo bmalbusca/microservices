@@ -15,8 +15,16 @@
     <script type="text/javascript">
       let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
       //scanner.addListener('scan', function (content) {
-        content = "hello"
-        console.log(content)
+
+        //////////////////////// a apagar - so para testar!//////////
+        inQR = "/secretariat/search"
+        host = "0.0.0.0"
+        http = "http://"
+        port = "5000"
+        content = http.concat(host).concat(":").concat(port).concat(inQR)
+        ///////////////////////
+
+        //console.log(content)
         //console.log(typeof content) // content is of type string
         $.ajax({
           type:"POST",
@@ -30,6 +38,7 @@
         }
         });
       //});
+      
      /* Instascan.Camera.getCameras().then(function (cameras) {
         if (cameras.length > 0) {
           scanner.start(cameras[0]);
@@ -45,5 +54,3 @@
     
   </body>
 </html>
-<!-- jquery.min.js:4 Access to XMLHttpRequest at 'file:///readQR' from origin 'null' has been blocked by CORS policy: Cross origin requests are only supported for protocol schemes: http, data, chrome, chrome-extension, https.
-com apenas json -->

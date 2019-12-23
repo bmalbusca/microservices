@@ -53,8 +53,8 @@ def page_not_found(e):
     return  "Sorry, source not available.", 404
 
 
-######################################
-redirect_uri = "http://127.0.0.1:5000/userAuth" # this is the address of the page on this app
+###################################### MOBILE APP
+redirect_uri = "http://0.0.0.0:5000/mobile/userAuth" # this is the address of the page on this app
 client_id= "570015174623394"
 clientSecret = "BNSpLi3noPqnh6/AX2pBKXSOG2uVy+XZ+9MqcE3aq0QHWa5VOS350ofnhkcsMgqXeSRLX0iDSa5R6CzAfcu8NQ=="
 
@@ -71,6 +71,9 @@ sizeSecret  = 10 #string will have 8 digits
 # return a random string with nbytes rahttps://fandom.randintenix.tecnico.ulisboa.pt/oauthndom bytes with each byte converted to 2 hex digits
 userSecret = secrets.token_hex(int(sizeSecret/2))
 askedSecret = False
+
+userlist = []
+
 ######################################
 
 
@@ -154,7 +157,6 @@ def menu():
 def room():
     temporary_log.append(logs.message('/room/'))
     return render_template("room.html", ref=web_pages["room"]+"/search")
-
 
 @app.route('/secretariat/', methods = ['GET','POST'])
 def set():
@@ -250,6 +252,13 @@ def mobile_auth():
         # the app redirecte the user to the FENIX login page
         return redirect(redPage)
     else:
+        params = {'access_token': userToken}
+        resp = req.get("https://fenix.tecnico.ulisboa.pt/api/fenix/v1/person", params = params)
+        if (resp.status_code == 200):
+            r_info = resp.json()
+            aux = {"user_info": r_info
+            }
+            userlist.append(aux)
         return render_template("mobileIn.html", username=loginName)
 
 ################################################
@@ -273,11 +282,18 @@ def readQR_auth():
             if (request.method == 'POST'):
                 if (request.is_json):
                     QRdata = request.json#['QRinfo']
-                    url = QRdata.split(http +  host + ":" + port,1)[1]
-
-
-                    return jsonify(QRdata) #vai me devolver para a consola em formato json
-                return jsonify(4) #vai me devolver para a consola em formato json   
+                    print("how does:")
+                    print(QRdata)
+                    url = QRdata.split(http +  host + ":",1)[1]
+                    url = url[5:]
+                    print(url.split("/",2))
+                    microservice = url.split("/",2)[1] 
+                    data = url.split("/",2)[2]
+                    #tp = url.split("/",3)[3]
+                    print("aqui vai a tentativa:") 
+                    print("microservice: "+microservice)
+                    print(url_for("api_"+microservice,subpath = data))
+                    return redirect(url_for("api_"+ microservice, subpath = data))
             else:
                 return redirect("static/testwebcam.html")
                 #return render_template("privPage.html", username=loginName, name=r_info['name'])           
@@ -310,7 +326,9 @@ def askSecret_auth():
                 "photo": r_info["photo"],
                 "secret": userSecret
                 }
-                return info#json2html.convert(json = r_info["photo"])
+                my_item = next((item for item in userlist if item['user_info'] == r_info), None)
+                my_item['secret'] = userSecret
+                return info
         return redirect('static/askSecret.html')
 
 ##################################################
@@ -319,7 +337,7 @@ def validateSecret_auth():
     #this page can only be accessed by a authenticated username
     if loginName == False:
         #if the user is not authenticated
-        redPage = fenixLoginpage % (client_id, redirect_uri)
+        # redPage = fenixLoginpage % (client_id, redirect_uri)
         # the app redirecte the user to the FENIX login page
         return redirect(redPage)
     else:
@@ -336,13 +354,28 @@ def validateSecret_auth():
                 if (request.is_json):
                     secretIn = request.json["secret"] # secretIn is a string: print(type(secretIn))
                     if(len(secretIn)!= sizeSecret):
-                        return json2html.convert(json = "invalid")
-                    return json2html.convert(json = secretIn)
+                        aux = {"secret": "invalid"}
+                        print(aux)
+                        return aux
+                    #check if secret is in userlist
+                    #if it is then return data
+                    my_item = next((item for item in userlist if item['secret'] == secretIn), None)
+                    if my_item is None:
+                        aux = {"secret": "invalid"}
+                        return aux
+                    else:
+                        info = {
+                        "name": my_item['user_info']["name"],
+                        "istID": my_item['user_info']["username"],
+                        "photo": my_item['user_info']["photo"],
+                        "secret": userSecret
+                        }
+                        return info
         return redirect('static/validateSecret.html')
 
 
 ################################################
-@app.route('/userAuth')
+@app.route('/mobile/userAuth')
 def userAuthenticated():
     #This page is accessed when the user is authenticated by the fenix login pagesetup
 
@@ -372,12 +405,7 @@ def userAuthenticated():
         loginName = r_info['username']
         global userToken
         userToken = r_token['access_token']
-
-        #now the user has done the login
-        return jsonify(r_info)
-        #we show the returned infomration
-        #but we could redirect the user to the private page
-        return redirect('/private') #comment the return jsonify....
+        return redirect('/mobile') #comment the return jsonify....
     else:
         return 'oops'
 
