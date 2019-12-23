@@ -24,7 +24,22 @@ class logs(object):
     def message(service_url, time=datetime.now().strftime("%d/%m/%Y %H:%M:%S")):
         return {"service": service_url, "datetime": time}
 
-temporary_log = [] 
+temporary_log = []
+
+
+def push_log(info):
+    try:
+        req.put(proxy["log"]+"insert/", headers = {'Content-type': 'application/json'}, json=info)
+    except:
+        pass
+
+def pop_log():
+     data= json.loads(req.get(proxy["log"]+"request/").text)
+     return data["log"]
+
+
+
+
 
 
 web_pages = {
@@ -43,7 +58,8 @@ hash_services = {
 proxy = {
         "room": "http://"+str(public_ip)+":5001/room/" ,
         "canteen": "http://"+str(public_ip)+":5003/menu/" ,
-        "secretariat": "http://"+str(public_ip)+":5002/secretariat/"
+        "secretariat": "http://"+str(public_ip)+":5002/secretariat/",
+        "log": "http://"+str(public_ip)+":5011/"
         }
 
       
@@ -80,17 +96,17 @@ askedSecret = False
 ##############################
 @app.route('/api/room/<path:subpath>', methods= ['GET', 'POST'])
 def api_room(subpath):
-    temporary_log.append(logs.message('/api/room/'+(str(subpath))))
+    push_log(logs.message('/api/room/'+(str(subpath))))
     return req.get(proxy["room"]+str(subpath)).text
    
 @app.route('/api/secretariat/<path:subpath>', methods= ['GET', 'POST'])
 def api_secretariat(subpath):
-    temporary_log.append(logs.message('/api/secretariat/'+(str(subpath))))
+    push_log(logs.message('/api/secretariat/'+(str(subpath))))
     return req.get(proxy["secretariat"]+str(subpath)).text
    
 @app.route('/api/menu/<path:subpath>', methods= ['GET', 'POST'])
 def api_menu(subpath):
-    temporary_log.append(logs.message('/api/menu/'+(str(subpath))))
+    push_log(logs.message('/api/menu/'+(str(subpath))))
     return req.get(proxy["canteen"]+str(subpath)).text 
 
 ##############################
@@ -98,7 +114,7 @@ def api_menu(subpath):
 ##############################
 @app.route('/api/token/<path:subpath>', methods= ['GET', 'POST'])
 def api_hashtable(subpath):
-    temporary_log.append(logs.message('/api/token/'+(str(subpath))))
+    push_log(logs.message('/api/token/'+(str(subpath))))
     if str(subpath) in hash_services:
         return make_response(jsonify({"token": hash_services[subpath]}), 201)
     else:
@@ -110,14 +126,11 @@ def api_hashtable(subpath):
 @app.route('/', methods= ['GET', 'POST'])
 def index():#proxies={}):
 	if session.get('inAdmin'): #if user is logged in as Admin then send them to the web page to create/change Secretariat and see logs
-		temporary_log.append(logs.message('/adminPage/'))
-		print("LOG:", len(temporary_log), temporary_log)
-		data = temporary_log
-		print(len(data), data)
-
+    		
+		data = pop_log()
 		return render_template("adminPage.html", log = data)
 	else:
-		temporary_log.append(logs.message('/loginAdmin/'))
+		push_log(logs.message('/loginAdmin/'))
 		return render_template("loginadmin.html") # webpage with loginform, after submit send to route bellow
 
     #global web_pages   
@@ -145,27 +158,27 @@ def logoutAdmin():
 ##############################
 @app.route('/menu/', methods= ['GET', 'POST'])
 def menu():
-    temporary_log.append(logs.message('/menu/'))
+    push_log(logs.message('/menu/'))
     print(web_pages["canteen"])
     return render_template("menu.html", ref = web_pages["canteen"]+"/search" )
      
 
 @app.route('/room/', methods = ['GET','POST'])
 def room():
-    temporary_log.append(logs.message('/room/'))
+    push_log(logs.message('/room/'))
     return render_template("room.html", ref=web_pages["room"]+"/search")
 
 
 @app.route('/secretariat/', methods = ['GET','POST'])
 def set():
-    temporary_log.append(logs.message('/secretariat/'))
+    push_log(logs.message('/secretariat/'))
     return render_template("set.html", ref=web_pages["secretariat"]+"/search")
 
 ##############################
 # WEB - POST
 ##############################
 @app.route('/addSecretariat', methods= ['POST'])
-def insert_set():
+def insert_set(): 
     print("proxy", proxy["canteen"])
     print("menu - POST ")
     
@@ -177,15 +190,36 @@ def insert_set():
         h = request.form['OpeningHours']
 
         add = "http://"+str(public_ip)+":5002/insert/" +str(name)+"/"+str(local)
-        data= req.get(add).text
-        print(add)
-        req.post(add, json={"location": local, "name": name , "description": desc , "time":h } )
-        temporary_log.append(logs.message(add))
+       
+       
+        data = req.put(add, headers = {'Content-type': 'application/json'}, json={"location": str(local), "name": str(name) , "description": str(desc) , "time":h } ).text
+        push_log(logs.message(add))
         return json2html.convert(json = data)
     
     else:
 
         return redirect(url_for('menu'))
+
+@app.route('/changeSecretariat', methods= ['POST'])
+def change_set():
+    if request.method == 'POST':
+
+        name = request.form['name']
+        local = request.form['local']
+        desc = request.form['des']
+        h = request.form['hours']
+
+        add = "http://"+str(public_ip)+":5002/insert/" +str(name)+"/"+str(local)
+
+
+        data = req.put(add, headers = {'Content-type': 'application/json'}, json={"location": str(local), "name": str(name) , "description": str(desc) , "time":h } ).text
+        push_log(logs.message(add))
+        return json2html.convert(json = data)
+    else:
+        return redirect(url_for('menu'))
+
+
+
 
 
 @app.route('/menu/search', methods= ['POST'])
@@ -199,7 +233,7 @@ def menu_search():
         add = proxy["canteen"] + day + "/" + m + "/" + y
         data= req.get(add).text
         print(add)
-        temporary_log.append(logs.message(add))
+        push_log(logs.message(add))
         return json2html.convert(json = data)
     
     else:
@@ -215,7 +249,7 @@ def room_search():
         add = proxy["room"] + str(num)
         print(add)
         data= req.get(add).text
-        temporary_log.append(logs.message(add))
+        push_log(logs.message(add))
         return json2html.convert(json = data)
     
     else:
@@ -232,7 +266,7 @@ def set_search():
         add = proxy["secretariat"] + str(name) + "/" + str(local) 
         data= req.get(add).text
         print(add)
-        temporary_log.append(logs.message(add))
+        push_log(logs.message(add))
         return json2html.convert(json = data)
     
     else:
@@ -248,6 +282,7 @@ def mobile_auth():
         #if the user is not authenticated
         redPage = fenixLoginpage % (client_id, redirect_uri)
         # the app redirecte the user to the FENIX login page
+        push_log(logs.message('/mobile'))
         return redirect(redPage)
     else:
         return render_template("mobileIn.html", username=loginName)
@@ -255,6 +290,7 @@ def mobile_auth():
 ################################################
 @app.route('/readQR', methods = ['GET','POST'] )
 def readQR_auth():
+    push_log(logs.message('/readQR'))
     #this page can only be accessed by a authenticated username
     if loginName == False:
         #if the user is not authenticated
@@ -287,6 +323,8 @@ def readQR_auth():
 ##################################################
 @app.route('/askSecret', methods = ['GET','POST'])
 def askSecret_auth():
+    push_log(logs.message('/askSecret'))
+
     #this page can only be accessed by a authenticated username
     if loginName == False:
         #if the user is not authenticated
@@ -299,7 +337,7 @@ def askSecret_auth():
         #we can use the userToken to access the fenix
         params = {'access_token': userToken}
         resp = req.get("https://fenix.tecnico.ulisboa.pt/api/fenix/v1/person", params = params)
-
+            
         if (resp.status_code == 200):
             r_info = resp.json()
             # if sucessfully loggedin then check if it's POST and if not just return regular page 
@@ -316,6 +354,8 @@ def askSecret_auth():
 ##################################################
 @app.route('/validateSecret', methods = ['GET','POST'])
 def validateSecret_auth():
+    push_log(logs.message('/validateSecret'))
+
     #this page can only be accessed by a authenticated username
     if loginName == False:
         #if the user is not authenticated
@@ -350,6 +390,7 @@ def userAuthenticated():
     code = request.args['code']
     #print ("code "+request.args['code'])
 
+    push_log(logs.message('/userAuth'))
 
     # we now retrieve a fenix access token
     payload = {'client_id': client_id, 'client_secret': clientSecret, 'redirect_uri' : redirect_uri, 'code' : code, 'grant_type': 'authorization_code'}

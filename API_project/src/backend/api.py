@@ -11,6 +11,8 @@ public_ip = req.get('https://api.ipify.org').text
 http = "http://"
 port = "5000"
 
+print("IP", public_ip)
+
 class logs(object):
     @staticmethod
     def message(service_url, time=datetime.now().strftime("%d/%m/%Y %H:%M:%S")):
@@ -24,7 +26,7 @@ def push_log(info):
         pass
 
 def pop_log():
-     data= req.get(proxy["log"]+"request/").text
+     data= json.loads(req.get(proxy["log"]+"request/").text)
      return data["log"]
 
 

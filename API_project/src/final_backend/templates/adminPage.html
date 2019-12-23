@@ -21,14 +21,15 @@
 				Opening Hours: <input type="text" name="OpeningHours"><br>
 				<input type="submit">
 			</form>
-
-
 			<h1> Edit Secretariats </h1>
-			<form action="/searchSecretariat" method="post"> 
-				Name: <input type="text" name="Name"><br>
+			<form action="/changeSecretariat" method="post"> 
+				Name: <input type="text" name="name"><br>
+				Location: <input type="text" name="local"><br>
+				<br><h3>New data</h3>	
+				Description: <input type="text" name="des"><br>
+				Opening Hours: <input type="text" name="hours"><br>
 				<input type="submit" onclick ="return resultSearch();"/>
 			</form>
-
 			<!-- flask returns render_template('adminSecretariat, item = data) -->
 			<p id="display"></p><br>
 
