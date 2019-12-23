@@ -19,11 +19,17 @@ class logs(object):
 temporary_log = [] 
 
 
-
 web_pages = {
         "room":http +  host + ":" + port + "/room" ,
         "canteen":http +  host + ":" + port  + "/menu" ,
         "secretariat":http +  host + ":" + port + "/secretariat"
+        }
+
+
+hash_services = {
+                '6OAQ29s1fMrKQTVxMg6P' : web_pages["room"],
+                'YB8rmIMi1qQ33vJlJ5Ik' : web_pages["canteen"],
+                'tlDElAgZYbMlppAHwWki' : web_pages["secretariat"],
         }
 
 proxy = {
@@ -59,6 +65,16 @@ def api_menu(subpath):
     temporary_log.append(logs.message('/api/menu/'+(str(subpath))))
     return req.get(proxy["canteen"]+str(subpath)).text 
 
+################
+#   QR code
+################
+@app.route('/api/token/<path:subpath>', methods= ['GET', 'POST'])
+def api_hashtable(subpath):
+    temporary_log.append(logs.message('/api/token/'+(str(subpath))))
+    if str(subpath) in hash_services:
+        return make_response(jsonify({"token": hash_services[subpath]}), 201)
+    else:
+        abort(404)
 
 
 

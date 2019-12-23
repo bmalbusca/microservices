@@ -1,6 +1,16 @@
 
 ```
 
+Ask for a service w/ tokens:
+	Example: http://127.0.0.1:5000/api/token/6OAQ29s1fMrKQTVxMg6P
+
+Available services:
+hash_services = {
+                '6OAQ29s1fMrKQTVxMg6P' : web_pages["room"],
+                'YB8rmIMi1qQ33vJlJ5Ik' : web_pages["canteen"],
+                'tlDElAgZYbMlppAHwWki' : web_pages["secretariat"],
+        }
+
 API_project/src/
 	| - project_notes/
 	:
