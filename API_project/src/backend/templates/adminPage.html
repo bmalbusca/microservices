@@ -23,14 +23,7 @@
 			</form>
 
 
-			<!-- Edit secretariat 
-					Form to input id or some other info 
-					Edit dynamically (without updating rest of page) (input and save)
-					Access logs
-			-->
 			<h1> Edit Secretariats </h1>
-			<!-- Make a get request to the same web server that hosts the form page but to a different URL -->
-
 			<form action="/searchSecretariat" method="post"> 
 				Name: <input type="text" name="Name"><br>
 				<input type="submit" onclick ="return resultSearch();"/>
@@ -39,24 +32,11 @@
 			<!-- flask returns render_template('adminSecretariat, item = data) -->
 			<p id="display"></p><br>
 
-			<!--
-			Name: <p id="Name"></p>br>
-			Location: <p id="Location"></p><br>
-			Description: <p id="Description"></p><br>
-			Opening Hours: <p id="OpeningHours"></p><br>
-			-->
 
 			<!-- Then on the API have a app.route('listLogs') that returns the render_template("listLogsTemplate.html", list = logs)-->
 			<h1 href = "/listLogs"> Check logs </h1>			  
 
-			<script>
-				// to display the searched result
-				function resultSearch(){
-					var resource = {{item}};
-					document.getElementById('display').innerHTML = resource;
-					return true;
-				}
+			<h1> Create a new microservice</h1> 
 
-			</script>
 		</body>
 		</html>
