@@ -86,7 +86,7 @@ def link():
 #
 ################################################################################################
 
-@app.route('/insert/<path:subpath>', methods = ['GET','PUT'])
+@app.route('/insert/<path:subpath>', methods = ['GET','POST','PUT'])
 def insert(subpath):
     
     #We need to check if json data is correctly composed 
