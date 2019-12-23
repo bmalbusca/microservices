@@ -153,6 +153,18 @@ def logoutAdmin():
 	session['inAdmin'] = False
 	return index()
 
+
+
+@app.route('/show', methods= ['GET', 'POST'])
+def show(proxies={}):
+    global web_pages
+       
+    proxies = web_pages 
+    push_log(logs.message('/show/'))
+    return render_template("index.html", proxies=proxies)
+
+
+
 ##############################
 # WEB - GET/POST
 ##############################
@@ -421,6 +433,9 @@ def userAuthenticated():
         return redirect('/private') #comment the return jsonify....
     else:
         return 'oops'
+
+
+
 
 
 ##############################
