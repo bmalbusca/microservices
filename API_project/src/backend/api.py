@@ -38,7 +38,7 @@ proxy = {
         "secretariat": "http://0.0.0.0:5002/secretariat/"
         }
 
-        
+      
 
 
 @app.errorhandler(404)
@@ -85,6 +85,8 @@ def api_hashtable(subpath):
 @app.route('/', methods= ['GET', 'POST'])
 def index(proxies={}):
     global web_pages
+    web_pages["canteen"] = url_for('menu')
+    
     proxies = web_pages 
     temporary_log.append(logs.message('/index/'))
     print("LOG:", len(temporary_log), temporary_log)
