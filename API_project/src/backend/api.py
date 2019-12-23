@@ -6,8 +6,8 @@ from datetime import  *
 
 app = Flask(__name__)
 
-#host = "127.0.0.1"
-host = "localhost"
+host = "0.0.0.0"
+#host = "localhost"
 http = "http://"
 port = "5000"
 
@@ -116,5 +116,5 @@ def menu():
 
 
 if __name__ == '__main__':
-    app.run( debug = True)
+    app.run(host = host, debug = True)
     pass
