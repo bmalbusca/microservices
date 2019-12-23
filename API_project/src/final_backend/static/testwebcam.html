@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Instascan</title>
+    <!-- ====================== JS ====================== -->
+    <script type="text/javascript" src="instascan.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- ====================== JS ====================== -->
+
+  </head>
+  <body>
+    <video id="preview"></video>
+    <!-- ====================== JS ====================== -->
+    <script type="text/javascript">
+      let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+      //scanner.addListener('scan', function (content) {
+
+        //////////////////////// a apagar - so para testar!//////////
+        inQR = "/secretariat/search"
+        host = "0.0.0.0"
+        http = "http://"
+        port = "5000"
+        content = http.concat(host).concat(":").concat(port).concat(inQR)
+        ///////////////////////
+
+        //console.log(content)
+        //console.log(typeof content) // content is of type string
+        $.ajax({
+          type:"POST",
+          url:"/readQR",
+          datatype:"json",
+          contentType: "application/json",
+          data: JSON.stringify(content),//'{"str":"' + content +'"}"',
+          success: function(response){
+            console.log(response)
+            console.log("it worked");
+        }
+        });
+      //});
+      
+     /* Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+          scanner.start(cameras[0]);
+        } else {
+          console.error('No cameras found.');
+        }
+      }).catch(function (e) {
+        console.error(e);
+      });*/
+    </script>
+    <!-- ====================== JS ====================== -->
+
+    
+  </body>
+</html>

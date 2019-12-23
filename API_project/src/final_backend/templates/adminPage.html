@@ -1,0 +1,49 @@
+<!DOCTYPE html> <!-- Instruction to web browser bcs HTML4 was based no SGMarkup Language --> 
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"> <!-- Specifies the character encoding the document -->
+   			<title> Admin page </title>
+		</head>
+		<body>
+			<!-- Create new secretariat
+					Form to input needed info
+			-->
+			<form action="/logoutAdmin" method="post"> 
+				<input type="submit" value="Logout">
+			</form>
+
+			<h1> Create a new Secretariat </h1>
+			<!-- Make a post request to the same web server that hosts the form page but to a different URL -->
+			<form action="/addSecretariat" method="post"> <!-- method="get" leaves the data visible in the URL -->
+				Name: <input type="text" name="Name"><br>
+				Location: <input type="text" name="Location"><br>
+				Description: <input type="text" name="Description"><br>
+				Opening Hours: <input type="text" name="OpeningHours"><br>
+				<input type="submit">
+			</form>
+
+
+			<h1> Edit Secretariats </h1>
+			<form action="/searchSecretariat" method="post"> 
+				Name: <input type="text" name="Name"><br>
+				<input type="submit" onclick ="return resultSearch();"/>
+			</form>
+
+			<!-- flask returns render_template('adminSecretariat, item = data) -->
+			<p id="display"></p><br>
+
+
+			<!-- Then on the API have a app.route('listLogs') that returns the render_template("listLogsTemplate.html", list = logs)-->
+			<h1 href = "/listLogs"> Check logs </h1>			  
+			<table border = 1>
+         			{% for item in log %}
+            			<tr>
+               			<th> {{ item.service }} </th>
+               			<td> {{ item.datetime }} </td>
+            			</tr>
+         			{% endfor %}
+      			</table>
+			<h1> Create a new microservice</h1> 
+
+		</body>
+		</html>
