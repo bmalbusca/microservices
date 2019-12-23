@@ -94,14 +94,15 @@ def insert(subpath):
     
     
     # name/local  - primary keys 
-    req = request.get_json()
+    res = request.get_json()
+    print(res)
     # set(d_1.keys()) == set(d_2.keys()) check if have the same type
-    if not req: 
+    if not res:
         return make_response(jsonify({"error": "Missing data for insert "+str(keys[0])+ "," + str(keys[1]) + "@database" }), 400)
 
+    print("Insert:", res)
 
-
-    status = db.insert(req)
+    status = db.insert(res)
     
     if status == 200:
         res = make_response(jsonify({"message": "Collection replaced"}), 200)

@@ -35,7 +35,14 @@
 
 			<!-- Then on the API have a app.route('listLogs') that returns the render_template("listLogsTemplate.html", list = logs)-->
 			<h1 href = "/listLogs"> Check logs </h1>			  
-
+			<table border = 1>
+         			{% for item in log %}
+            			<tr>
+               			<th> {{ item.service }} </th>
+               			<td> {{ item.datetime }} </td>
+            			</tr>
+         			{% endfor %}
+      			</table>
 			<h1> Create a new microservice</h1> 
 
 		</body>

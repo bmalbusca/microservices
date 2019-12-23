@@ -90,8 +90,28 @@ def index(proxies={}):
     print("LOG:", len(temporary_log), temporary_log)
     return render_template("index.html", proxies=proxies)
 
+@app.route('/addSecretariat', methods= ['POST'])
+def insert_set():
+    print("proxy", proxy["canteen"])
+    print("menu - POST ")
+    
+    if request.method == 'POST':
+       
+        name = request.form['Name']
+        local = request.form['Location']
+        desc = request.form['Description']
+        h = request.form['OpeningHours']
 
+        add = "http://"+str(public_ip)+":5002/insert/" +str(name)+"/"+str(local)
+        data= req.get(add).text
+        print(add)
+        req.post(add, json={"location": local, "name": name , "description": desc , "time":h } )
+        temporary_log.append(logs.message(add))
+        return json2html.convert(json = data)
+    
+    else:
 
+        return redirect(url_for('menu'))
 
 
 
@@ -174,6 +194,11 @@ def set():
     temporary_log.append(logs.message('/secretariat/'))
     return render_template("set.html", ref=web_pages["secretariat"]+"/search")
 
+@app.route('/admin/', methods = ['GET','POST'])
+def admin_page():
+    data = temporary_log
+    print(len(data), data)
+    return render_template("adminPage.html", log=data)
 
 
 
