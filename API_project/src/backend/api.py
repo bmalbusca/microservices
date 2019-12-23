@@ -16,6 +16,19 @@ class logs(object):
     def message(service_url, time=datetime.now().strftime("%d/%m/%Y %H:%M:%S")):
         return {"service": service_url, "datetime": time}
 
+
+def push_log(info):
+    try:
+        req.put(proxy["log"]+"insert/", headers = {'Content-type': 'application/json'}, json=info)
+    except:
+        pass
+
+def pop_log():
+     data= req.get(proxy["log"]+"request/").text
+     return data["log"]
+
+
+
 temporary_log = [] 
 
 
@@ -35,7 +48,9 @@ hash_services = {
 proxy = {
         "room": "http://"+str(public_ip)+":5001/room/" ,
         "canteen": "http://"+str(public_ip)+":5003/menu/" ,
-        "secretariat": "http://"+str(public_ip)+":5002/secretariat/"
+        "secretariat": "http://"+str(public_ip)+":5002/secretariat/",
+        "log": "http://"+str(public_ip)+":5011/"
+
         }
 
       
@@ -51,17 +66,17 @@ def page_not_found(e):
 ###############
 @app.route('/api/room/<path:subpath>', methods= ['GET', 'POST'])
 def api_room(subpath):
-    temporary_log.append(logs.message('/api/room/'+(str(subpath))))
+    push_log( logs.message('/api/room/'+(str(subpath) ) ))
     return req.get(proxy["room"]+str(subpath)).text
    
 @app.route('/api/secretariat/<path:subpath>', methods= ['GET', 'POST'])
 def api_secretariat(subpath):
-    temporary_log.append(logs.message('/api/secretariat/'+(str(subpath))))
+    push_log(logs.message('/api/secretariat/'+(str(subpath))))
     return req.get(proxy["secretariat"]+str(subpath)).text
    
 @app.route('/api/menu/<path:subpath>', methods= ['GET', 'POST'])
 def api_menu(subpath):
-    temporary_log.append(logs.message('/api/menu/'+(str(subpath))))
+    push_log(logs.message('/api/menu/'+(str(subpath))))
     return req.get(proxy["canteen"]+str(subpath)).text 
 
 ################
@@ -69,7 +84,7 @@ def api_menu(subpath):
 ################
 @app.route('/api/token/<path:subpath>', methods= ['GET', 'POST'])
 def api_hashtable(subpath):
-    temporary_log.append(logs.message('/api/token/'+(str(subpath))))
+    push_log(logs.message('/api/token/'+(str(subpath))))
     if str(subpath) in hash_services:
         return make_response(jsonify({"token": hash_services[subpath]}), 201)
     else:
@@ -86,8 +101,7 @@ def index(proxies={}):
     global web_pages
        
     proxies = web_pages 
-    temporary_log.append(logs.message('/index/'))
-    print("LOG:", len(temporary_log), temporary_log)
+    push_log(logs.message('/index/'))
     return render_template("index.html", proxies=proxies)
 
 
@@ -107,7 +121,7 @@ def insert_set():
        
        
         data = req.put(add, headers = {'Content-type': 'application/json'}, json={"location": str(local), "name": str(name) , "description": str(desc) , "time":h } ).text
-        temporary_log.append(logs.message(add))
+        push_log(logs.message(add))
         return json2html.convert(json = data)
     
     else:
@@ -117,8 +131,8 @@ def insert_set():
 
 
 @app.route('/changeSecretariat', methods= ['POST'])
-def insert_set():
-     if request.method == 'POST':
+def change_set():
+    if request.method == 'POST':
        
         name = request.form['name']
         local = request.form['local']
@@ -129,11 +143,9 @@ def insert_set():
        
        
         data = req.put(add, headers = {'Content-type': 'application/json'}, json={"location": str(local), "name": str(name) , "description": str(desc) , "time":h } ).text
-        temporary_log.append(logs.message(add))
+        push_log(logs.message(add))
         return json2html.convert(json = data)
-    
     else:
-
         return redirect(url_for('menu'))
     
 
@@ -150,8 +162,7 @@ def menu_search():
         y = request.form['y']
         add = proxy["canteen"] + day + "/" + m + "/" + y
         data= req.get(add).text
-        print(add)
-        temporary_log.append(logs.message(add))
+        push_log(logs.message(add))
         return json2html.convert(json = data)
     
     else:
@@ -169,7 +180,7 @@ def room_search():
         add = proxy["room"] + str(num)
         print(add)
         data= req.get(add).text
-        temporary_log.append(logs.message(add))
+        push_log(logs.message(add))
         return json2html.convert(json = data)
     
     else:
@@ -188,8 +199,7 @@ def set_search():
         local = request.form['local']
         add = proxy["secretariat"] + str(name) + "/" + str(local) 
         data= req.get(add).text
-        print(add)
-        temporary_log.append(logs.message(add))
+        push_log(logs.message(add))
         return json2html.convert(json = data)
     
     else:
@@ -200,14 +210,14 @@ def set_search():
 
 @app.route('/menu/', methods= ['GET', 'POST'])
 def menu():
-    temporary_log.append(logs.message('/menu/'))
+    push_log(logs.message('/menu/'))
     print(web_pages["canteen"])
     return render_template("menu.html", ref = web_pages["canteen"]+"/search" )
      
 
 @app.route('/room/', methods = ['GET','POST'])
 def room():
-    temporary_log.append(logs.message('/room/'))
+    push_log(logs.message('/room/'))
     return render_template("room.html", ref=web_pages["room"]+"/search")
 
 
@@ -215,13 +225,12 @@ def room():
 
 @app.route('/secretariat/', methods = ['GET','POST'])
 def set():
-    temporary_log.append(logs.message('/secretariat/'))
+    push_log(logs.message('/secretariat/'))
     return render_template("set.html", ref=web_pages["secretariat"]+"/search")
 
 @app.route('/admin/', methods = ['GET','POST'])
 def admin_page():
-    data = temporary_log
-    print(len(data), data)
+    data = pop_log()
     return render_template("adminPage.html", log=data)
 
 
