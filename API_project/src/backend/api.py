@@ -90,6 +90,7 @@ def index(proxies={}):
     print("LOG:", len(temporary_log), temporary_log)
     return render_template("index.html", proxies=proxies)
 
+
 @app.route('/addSecretariat', methods= ['POST'])
 def insert_set():
     print("proxy", proxy["canteen"])
@@ -103,9 +104,9 @@ def insert_set():
         h = request.form['OpeningHours']
 
         add = "http://"+str(public_ip)+":5002/insert/" +str(name)+"/"+str(local)
-        data= req.get(add).text
-        print(add)
-        req.post(add, json={"location": local, "name": name , "description": desc , "time":h } )
+       
+       
+        data = req.put(add, headers = {'Content-type': 'application/json'}, json={"location": str(local), "name": str(name) , "description": str(desc) , "time":h } ).text
         temporary_log.append(logs.message(add))
         return json2html.convert(json = data)
     
