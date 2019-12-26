@@ -45,6 +45,12 @@
          			{% endfor %}
       			</table>
 			<h1> Create a new microservice</h1> 
+				<form action="/newService" method="post"> <!-- method="get" leaves the data visible in the URL -->
+				Name: <input type="text" name="name"><br>
+				API URL: <input type="text" name="url"><br>
+				<input type="submit">
+			</form>
 
+				 
 		</body>
 		</html>

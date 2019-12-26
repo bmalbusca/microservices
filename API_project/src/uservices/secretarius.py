@@ -22,8 +22,10 @@ class Database(object):
             for setdata in self.database["secretariats"]:
                 if setdata["name"] == data["name"] and  setdata["location"] == data["location"]:                
                     setdata = data 
+                    self.save()
                     return 200
             self.database["secretariats"].append(data)
+            self.save()
             return 201
 
         except:
@@ -42,7 +44,19 @@ class Database(object):
             if name == data["name"]:
                 self.database["secretariats"].remove(data) 
                 break
-
+    def load(self, namefile = "secretariat.json"):
+        try:
+            with open(namefile, "r") as jsonFile:
+                self.database = json.load(jsonFile)
+        except:
+            pass
+    
+    def save(self,namefile = "secretariat.json"):
+        try:
+             with open(namefile, "w") as jsonFile:
+                json.dump(self.database, jsonFile)
+        except:
+            pass 
 
     def reset(self):
         del self.database["secretariats"]
@@ -57,14 +71,7 @@ class Database(object):
     
 app = Flask(__name__)
 db = Database(datab)
-#db.printDB()
-
-#db.insert(secretariat)
-#db.printDB()
-#db.reset()
-#db.printDB()
-
-
+db.load()
 
 
 

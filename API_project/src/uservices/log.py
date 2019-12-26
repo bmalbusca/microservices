@@ -7,6 +7,9 @@ from datetime import *
 datab = { "log" : [ ]}
 
 
+
+
+
 class Database(object):
 
     def __init__(self,data={"log" :[]} ):
@@ -15,12 +18,26 @@ class Database(object):
     def insert(self, data):
         try:
             self.database["log"].append(data)
+            self.save()
             return 201
 
         except:
             print("Database not defined")
             return 400 
     
+    def load(self, namefile = "log.json"):
+        try:
+            with open(namefile, "r") as jsonFile:
+                self.database = json.load(jsonFile)
+        except:
+            pass
+    
+    def save(self,namefile = "log.json"):
+        try:
+             with open(namefile, "w") as jsonFile:
+                json.dump(self.database, jsonFile)
+        except:
+            pass 
 
     def reset(self):
         del self.database["log"]
@@ -35,6 +52,10 @@ class Database(object):
     
 app = Flask(__name__)
 db = Database(datab)
+db.load()
+
+
+
 
 @app.errorhandler(404)
 def page_not_found(e):

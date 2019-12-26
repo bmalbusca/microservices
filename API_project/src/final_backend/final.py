@@ -18,14 +18,12 @@ public_ip = req.get('https://api.ipify.org').text
 http = "http://"
 port = "5000"
 ##########################
+print("SERVER IP:", public_ip)
 
 class logs(object):
     @staticmethod
     def message(service_url, time=datetime.now().strftime("%d/%m/%Y %H:%M:%S")):
         return {"service": service_url, "datetime": time}
-
-temporary_log = []
-
 
 def push_log(info):
     try:
@@ -136,11 +134,6 @@ def index():#proxies={}):
 		push_log(logs.message('/loginAdmin/'))
 		return render_template("loginadmin.html") # webpage with loginform, after submit send to route bellow
 
-    #global web_pages   
-    #proxies = web_pages 
-    #return render_template("index.html", proxies=proxies)
-
-
 @app.route('/loginAdmin', methods = ["POST"])
 def loginAdmin():
 #	if request.method == "POST":
@@ -187,6 +180,32 @@ def room():
 def set():
     push_log(logs.message('/secretariat/'))
     return render_template("set.html", ref=web_pages["secretariat"]+"/search")
+
+
+@app.route('/newService/', methods = ['POST'])
+def new_service():
+    push_log(logs.message('/newService/'))
+    
+    if request.method == 'POST':
+       
+        name = request.form['name']
+        url = request.form['url']
+        proxy[name]= url 
+        web_pages[name] =  http + str(public_ip) + ":" + port + "/usrService/" + str(name)
+
+    else:
+        return redirect(url_for('menu'))
+
+@app.route('/usrService/<path:subpath>', methods = ['GET'])
+def show_usr_service(subpath):
+    push_log(logs.message('/usrService/'+str(subpath)))
+    fields = subpath.split("/")
+    data= req.get(proxy[fields[0]]).text
+    return json2html.convert(json = data)
+
+
+
+
 
 ##############################
 # WEB - POST
@@ -471,5 +490,5 @@ def userAuthenticated():
 ##############################	
 if __name__ == '__main__':
 	app.secret_key = os.urandom(12) 
-	app.run(host = host, debug = True)
+	app.run(host = host)
 	pass
