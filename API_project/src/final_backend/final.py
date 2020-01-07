@@ -185,21 +185,25 @@ def set():
 @app.route('/newService/', methods = ['POST'])
 def new_service():
     push_log(logs.message('/newService/'))
-    
+    print('New service added')
     if request.method == 'POST':
-       
+         
         name = request.form['name']
         url = request.form['url']
-        proxy[name]= url 
+        proxy[name]= str(url) 
         web_pages[name] =  http + str(public_ip) + ":" + port + "/usrService/" + str(name)
+        return redirect(url_for('show'))
 
     else:
-        return redirect(url_for('menu'))
+        return redirect(url_for('index'))
 
 @app.route('/usrService/<path:subpath>', methods = ['GET'])
 def show_usr_service(subpath):
+    print(subpath)
     push_log(logs.message('/usrService/'+str(subpath)))
     fields = subpath.split("/")
+    print(fields)
+    print(proxy[fields[0]])
     data= req.get(proxy[fields[0]]).text
     return json2html.convert(json = data)
 

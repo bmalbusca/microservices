@@ -3,7 +3,16 @@
 - [Project structure (link here!)](https://github.com/bmalbusca/ASIT/blob/master/API_project/README.md)
 
 - [Websites references (link here!)](https://github.com/bmalbusca/ASIT/blob/master/API_project/src/README.md)
-__________________
+_______
+
+O que falta fazer:
+
+- Error handling for 500; for new services
+- Backend working standalone. without Logs connection
+- From admin_page to show services button 
+- default redirect to admin_page 
+
+___________
 1. - [ ] uservices  - need to  uniformizing all REST error responses  (404,40x) and error when the uservice is offline 
 > 
 > - [X] rooms - Add codes for success case (20X); separate into object class file
@@ -19,7 +28,7 @@ __________________
 > - [ ] User Fenix 
 > - [ ] Autentication Admin 
 > - [ ] Admin Web pages (BRUNO)
-> - [ ] Web pages Forms (BRUNO)
+> - [X] Web pages Forms (BRUNO)
 
 
 3. - [x] QR
@@ -28,9 +37,9 @@ __________________
 > - [ ] User validation - my secret
 
 
-4. - [ ] Log
+4. - [X] Log
 >
-> - [ ] database 
+> - [X] database 
 
       
 
