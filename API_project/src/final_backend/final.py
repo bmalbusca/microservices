@@ -38,19 +38,10 @@ def pop_log():
 
 
 
-
-
 web_pages = {
         "room":http +  str(public_ip) + ":" + port + "/room" ,
         "canteen":http +  str(public_ip) + ":" + port  + "/menu" ,
         "secretariat":http + str(public_ip) + ":" + port + "/secretariat"
-        }
-
-
-hash_services = {
-                '6OAQ29s1fMrKQTVxMg6P' : web_pages["room"],
-                'YB8rmIMi1qQ33vJlJ5Ik' : web_pages["canteen"],
-                'tlDElAgZYbMlppAHwWki' : web_pages["secretariat"],
         }
 
 proxy = {
@@ -65,6 +56,11 @@ proxy = {
 @app.errorhandler(404)
 def page_not_found(e):
     return  "Sorry, source not available.", 404
+
+@app.errorhandler(500)
+def page_error(e):
+    return  "Sorry, address is wrong or such service is disabled.", 500
+
 
 
 ###################################### MOBILE APP
@@ -113,11 +109,33 @@ def api_menu(subpath):
 ##############################
 #   QR code
 ##############################
-@app.route('/api/token/<path:subpath>', methods= ['GET', 'POST'])
-def api_hashtable(subpath):
-    push_log(logs.message('/api/token/'+(str(subpath))))
-    if str(subpath) in hash_services:
-        return make_response(jsonify({"token": hash_services[subpath]}), 201)
+@app.route('/qr/<path:subpath>', methods= ['GET', 'POST'])
+def qr(subpath):
+
+    print(subpath)
+    #push_log(logs.message('/qr/'+(str(subpath))))
+    if (subpath):
+        token = subpath.split('/')
+        print(token)
+        service = ""
+        if(len(token)>1):
+            for i in range(1,len(token)):
+                service += token[i] 
+                if i < len(token)-1:
+                    service += '/'        
+            try:
+                address = proxy[token[0]]+service
+                print(address)
+                data = req.get(proxy[token[0]]+service).text 
+                return json2html.convert(json = data)
+            except:               
+                print("Error")
+                # Gave a 500 or 404
+        else:
+            abort(404)
+
+
+
     else:
         abort(404)
 
