@@ -39,9 +39,9 @@ def pop_log():
 
 
 web_pages = {
-        "room":http +  str(public_ip) + ":" + port + "/room" ,
-        "canteen":http +  str(public_ip) + ":" + port  + "/menu" ,
-        "secretariat":http + str(public_ip) + ":" + port + "/secretariat"
+        "room": "/room" ,
+        "canteen": "/menu" ,
+        "secretariat": "/secretariat"
         }
 
 proxy = {
