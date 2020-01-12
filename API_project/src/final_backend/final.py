@@ -15,9 +15,11 @@ app = Flask(__name__)
 ##########################
 host = "0.0.0.0"
 public_ip = req.get('https://api.ipify.org').text
-http = "http://"
+http = "https://"
 port = "5000"
 ##########################
+#http+host+":"+port
+
 print("SERVER IP:", public_ip)
 
 class logs(object):
@@ -34,8 +36,6 @@ def push_log(info):
 def pop_log():
      data= json.loads(req.get(proxy["log"]+"request/").text)
      return data["log"]
-
-
 
 
 
@@ -68,7 +68,7 @@ def page_not_found(e):
 
 
 ###################################### MOBILE APP
-redirect_uri = "http://0.0.0.0:5000/mobile/userAuth" # this is the address of the page on this app
+redirect_uri = http+host+":"+port+"/mobile/userAuth" # this is the address of the page on this app
 client_id= "570015174623394"
 clientSecret = "BNSpLi3noPqnh6/AX2pBKXSOG2uVy+XZ+9MqcE3aq0QHWa5VOS350ofnhkcsMgqXeSRLX0iDSa5R6CzAfcu8NQ=="
 
@@ -86,8 +86,8 @@ sizeSecret  = 10 #string will have 8 digits
 userSecret = secrets.token_hex(int(sizeSecret/2))
 askedSecret = False
 
+# will later be populated with the following info per user:
 userlist = []
-
 ######################################
 
 
@@ -97,12 +97,14 @@ userlist = []
 ##############################
 @app.route('/api/room/<path:subpath>', methods= ['GET', 'POST'])
 def api_room(subpath):
+    print("here")
     push_log(logs.message('/api/room/'+(str(subpath))))
     return req.get(proxy["room"]+str(subpath)).text
    
 @app.route('/api/secretariat/<path:subpath>', methods= ['GET', 'POST'])
 def api_secretariat(subpath):
     push_log(logs.message('/api/secretariat/'+(str(subpath))))
+    print(proxy["secretariat"]+str(subpath))
     return req.get(proxy["secretariat"]+str(subpath)).text
    
 @app.route('/api/menu/<path:subpath>', methods= ['GET', 'POST'])
@@ -175,6 +177,7 @@ def menu():
 def room():
     push_log(logs.message('/room/'))
     return render_template("room.html", ref=web_pages["room"]+"/search")
+
 
 @app.route('/secretariat/', methods = ['GET','POST'])
 def set():
@@ -309,6 +312,7 @@ def set_search():
 ##############################
 # MOBILE APP
 ##############################
+
 @app.route('/mobile')
 def mobile_auth():
     if loginName == False:
@@ -322,9 +326,22 @@ def mobile_auth():
         resp = req.get("https://fenix.tecnico.ulisboa.pt/api/fenix/v1/person", params = params)
         if (resp.status_code == 200):
             r_info = resp.json()
-            aux = {"user_info": r_info
-            }
-            userlist.append(aux)
+            #check if user list exists
+            if "user_info" in userlist:
+                #if so, check if user is there
+                currUser = next((item for item in userlist if item['user_info'] == r_info), None)
+                #if not there then add the user
+                if currUser is None:
+                    aux = {
+                    "user_info": r_info
+                    }
+                    userlist.append(aux) 
+            #no user list exists
+            else:
+                aux = {
+                    "user_info": r_info
+                    }
+                userlist.append(aux)    
         return render_template("mobileIn.html", username=loginName)
 
 ################################################
@@ -348,17 +365,29 @@ def readQR_auth():
             # if sucessfully loggedin then check if it's POST and if not just return regular page 
             if (request.method == 'POST'):
                 if (request.is_json):
-                    QRdata = request.json#['QRinfo']
-                    print("how does:")
-                    print(QRdata)
-                    url = QRdata.split(http +  host + ":",1)[1]
-                    url = url[5:]
-                    print(url.split("/",2))
-                    microservice = url.split("/",2)[1] 
-                    data = url.split("/",2)[2]
+                    QRdata = request.json
+                    #localip /qr/ micro/data
+
+                    #print(QRdata)
+                    #print("https://" +  public_ip + ":"+ port)
+                    url = QRdata.split("https://" +  public_ip + ":" + port,1)[1]
+                    #print(url)
+                    #print("dividi o url em")
+                    #print(url.split("/",3))
+                    #print(url) #/microserice/data
+                    #url = url[2:]
+                    #print("url plit plos /")
+                    #print(url.split("/",1))
+                    microservice = url.split("/",3)[2]
+                    #print("micros")
+                    #print(microservice)
+                    data = url.split("/",3)[3]
+                    #print("subpath data")
+                    #print(data)
                     #tp = url.split("/",3)[3]
-                    print("aqui vai a tentativa:") 
-                    print("microservice: "+microservice)
+                    #print("aqui vai a tentativa:") 
+                    #print("microservice: "+microservice)
+                    print("vou pedir o url para")
                     print(url_for("api_"+microservice,subpath = data))
                     return redirect(url_for("api_"+ microservice, subpath = data))
             else:
@@ -389,14 +418,46 @@ def askSecret_auth():
             r_info = resp.json()
             # if sucessfully loggedin then check if it's POST and if not just return regular page 
             if (request.method == 'POST'):
+                currUser = next((item for item in userlist if item['user_info'] == r_info), None)
+                currUser['secret'] = userSecret
                 info = {
-                "name": r_info["name"],
-                "istID": r_info["username"],
-                "photo": r_info["photo"],
-                "secret": userSecret
+                    "name": r_info["name"],
+                    "istID": r_info["username"],
+                    "photo": r_info["photo"],
+                    "secret": userSecret
                 }
-                my_item = next((item for item in userlist if item['user_info'] == r_info), None)
-                my_item['secret'] = userSecret
+                return info
+        return redirect('static/askSecret.html')
+
+@app.route('/valBy', methods = ['GET','POST'])
+def valBy_auth():
+    push_log(logs.message('/valBy'))
+    if loginName == False:
+        #if the user is not authenticated
+        redPage = fenixLoginpage % (client_id, redirect_uri)
+        # the app redirecte the user to the FENIX login page
+        return redirect(redPage)
+    else:
+        params = {'access_token': userToken}
+        resp = req.get("https://fenix.tecnico.ulisboa.pt/api/fenix/v1/person", params = params)
+        
+        if (resp.status_code == 200):
+            r_info = resp.json()
+            if (request.method == 'GET'):
+                currUser = next((item for item in userlist if item['user_info'] == r_info), None)
+                # if the user has been validated by someone  
+                if "lastvalBy" in currUser:
+                    # get info of the user that asked for the validation
+                    lastvalBy = currUser['lastvalBy']
+                    info = {
+                        "name": lastvalBy["name"],
+                        "istID": lastvalBy["istID"],
+                        "photo": lastvalBy["photo"]
+                    }
+                # no user has asked for validation of the currUser
+                else:
+                    info = {
+                        "name": "none"}
                 return info
         return redirect('static/askSecret.html')
 
@@ -426,7 +487,6 @@ def validateSecret_auth():
                     secretIn = request.json["secret"] # secretIn is a string: print(type(secretIn))
                     if(len(secretIn)!= sizeSecret):
                         aux = {"secret": "invalid"}
-                        print(aux)
                         return aux
                     #check if secret is in userlist
                     #if it is then return data
@@ -435,11 +495,31 @@ def validateSecret_auth():
                         aux = {"secret": "invalid"}
                         return aux
                     else:
+                        #check if user asking for validation already generated their own secret
+                        lastvalByuser = next((item for item in userlist if item['user_info'] == r_info), None)
+                        if lastvalByuser is None:
+                            #if the user hasn't asked for their own secret:
+                            my_item['lastvalBy'] = {
+                                "name": r_info["name"],
+                                "istID": r_info["username"],
+                                "photo": r_info["photo"]
+                                #"secret": lastvalBysecret  
+                            }
+                        else:
+                            #if the user already has a secret:
+                            my_item['lastvalBy'] = {
+                                "name": r_info["name"],
+                                "istID": r_info["username"],
+                                "photo": r_info["photo"],
+                                # add to the data of the user whose secret was input, the data of the user that asked for validation
+                                "secret": lastvalByuser["secret"]  
+                            }
+                        #info to be displayed of requested user given a valid secret:
                         info = {
-                        "name": my_item['user_info']["name"],
-                        "istID": my_item['user_info']["username"],
-                        "photo": my_item['user_info']["photo"],
-                        "secret": userSecret
+                            "name": my_item['user_info']["name"],
+                            "istID": my_item['user_info']["username"],
+                            "photo": my_item['user_info']["photo"],
+                            "secret": userSecret
                         }
                         return info
         return redirect('static/validateSecret.html')
@@ -490,5 +570,5 @@ def userAuthenticated():
 ##############################	
 if __name__ == '__main__':
 	app.secret_key = os.urandom(12) 
-	app.run(host = host)
+	app.run(host = host, ssl_context='adhoc')
 	pass
