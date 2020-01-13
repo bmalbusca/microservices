@@ -29,6 +29,10 @@ class Menu(object):
             data = self.request() 
 
         if (data): 
+            print(len(self.menu))
+            if len(self.menu) > 30:
+                recent_cache = dict(list(self.menu.items())[len(self.menu)//2:])
+
             for day in data: # comes as a list 
                 if day["day"] not in self.menu.keys():
                     self.menu[day["day"]] = day["meal"] 

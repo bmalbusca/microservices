@@ -17,6 +17,10 @@ class Database(object):
 
     def insert(self, data):
         try:
+            if len(self.database["log"]) > 40:
+                size = len(self.database["log"]) 
+                recent = self.database["log"][size//2:]
+                self.database["log"] = recent 
             self.database["log"].append(data)
             self.save()
             return 201

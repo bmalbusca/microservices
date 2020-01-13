@@ -4,6 +4,7 @@ import requests as req
 import json
 from json2html import *
 from datetime import  *
+
 #### admin.py
 from flask import session
 import os
@@ -28,14 +29,35 @@ class logs(object):
         return {"service": service_url, "datetime": time}
 
 def push_log(info):
-    try:
-        req.put(proxy["log"]+"insert/", headers = {'Content-type': 'application/json'}, json=info)
-    except:
-        pass
+     try:
+        respo= req.put(proxy["log"]+"insert/", headers = {'Content-type': 'application/json'}, json=info)
+       
+     except req.exceptions.HTTPError:
+         print("log database is disabled")
+         pass 
+     except req.exceptions.ConnectionError:
+         print("log database is disabled")
+         pass 
+    
+
 
 def pop_log():
-     data= json.loads(req.get(proxy["log"]+"request/").text)
-     return data["log"]
+     try:
+        
+        data= json.loads(req.get(proxy["log"]+"request/").text)
+        return data["log"]
+        
+     except req.exceptions.HTTPError:
+        print("log database is disabled")
+        pass 
+     except req.exceptions.ConnectionError:
+        print("log database is disabled")
+        data = {}
+        data["log"]=[]
+        return  data["log"]
+
+     
+
 
 
 
@@ -66,7 +88,7 @@ def page_error(e):
 
 
 ###################################### MOBILE APP
-redirect_uri = http+host+":"+port+"/mobile/userAuth" # this is the address of the page on this app
+redirect_uri = http+public_ip+":"+port+"/mobile/userAuth" # this is the address of the page on this app
 client_id= "570015174623394"
 clientSecret = "BNSpLi3noPqnh6/AX2pBKXSOG2uVy+XZ+9MqcE3aq0QHWa5VOS350ofnhkcsMgqXeSRLX0iDSa5R6CzAfcu8NQ=="
 
@@ -117,7 +139,7 @@ def api_menu(subpath):
 def qr(subpath):
 
     print(subpath)
-    #push_log(logs.message('/qr/'+(str(subpath))))
+    push_log(logs.message('/qr/'+(str(subpath))))
     if (subpath):
         token = subpath.split('/')
         print(token)
@@ -128,8 +150,11 @@ def qr(subpath):
                 if i < len(token)-1:
                     service += '/'        
             try:
+                if token[0] == "menu":
+                    token[0] = "canteen"
+                elif token[0] == "set":
+                    token[0] = "secretariat"
                 address = proxy[token[0]]+service
-                print(address)
                 data = req.get(proxy[token[0]]+service).text 
                 return json2html.convert(json = data)
             except:               
@@ -590,9 +615,9 @@ def userAuthenticated():
 
 
 ##############################
-# MAIN
+# MAIN ssl_context='adhoc')
 ##############################	
 if __name__ == '__main__':
 	app.secret_key = os.urandom(12) 
-	app.run(host = host, ssl_context='adhoc')
+	app.run(host = host, ssl_context='adhoc',debug=True)
 	pass
