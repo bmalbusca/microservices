@@ -54,7 +54,6 @@ proxy = {
         }
 
       
-
 @app.errorhandler(404)
 def page_not_found(e):
     return  "Sorry, source not available.", 404
@@ -353,7 +352,7 @@ def mobile_auth():
             #check if user list exists
             if "user_info" in userlist:
                 #if so, check if user is there
-                currUser = next((item for item in userlist if item['user_info'] == r_info), None)
+                currUser = next((item for item in userlist if item['user_info']['username'] == r_info['username']), None)
                 #if not there then add the user
                 if currUser is None:
                     aux = {
@@ -411,8 +410,8 @@ def readQR_auth():
                     #tp = url.split("/",3)[3]
                     #print("aqui vai a tentativa:") 
                     #print("microservice: "+microservice)
-                    print("vou pedir o url para")
-                    print(url_for("api_"+microservice,subpath = data))
+                    #print("vou pedir o url para")
+                    #print(url_for("api_"+microservice,subpath = data))
                     return redirect(url_for("api_"+ microservice, subpath = data))
             else:
                 return redirect("static/testwebcam.html")
@@ -442,7 +441,7 @@ def askSecret_auth():
             r_info = resp.json()
             # if sucessfully loggedin then check if it's POST and if not just return regular page 
             if (request.method == 'POST'):
-                currUser = next((item for item in userlist if item['user_info'] == r_info), None)
+                currUser = next((item for item in userlist if item['user_info']['username'] == r_info['username']), None)
                 currUser['secret'] = userSecret
                 info = {
                     "name": r_info["name"],
@@ -468,7 +467,7 @@ def valBy_auth():
         if (resp.status_code == 200):
             r_info = resp.json()
             if (request.method == 'GET'):
-                currUser = next((item for item in userlist if item['user_info'] == r_info), None)
+                currUser = next((item for item in userlist if item['user_info']['username'] == r_info['username']), None)
                 # if the user has been validated by someone  
                 if "lastvalBy" in currUser:
                     # get info of the user that asked for the validation
@@ -520,7 +519,7 @@ def validateSecret_auth():
                         return aux
                     else:
                         #check if user asking for validation already generated their own secret
-                        lastvalByuser = next((item for item in userlist if item['user_info'] == r_info), None)
+                        lastvalByuser = next((item for item in userlist if item['user_info']['username'] == r_info['username']), None)
                         if lastvalByuser is None:
                             #if the user hasn't asked for their own secret:
                             my_item['lastvalBy'] = {
