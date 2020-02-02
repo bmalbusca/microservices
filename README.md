@@ -5,6 +5,9 @@
 - [Websites references (link here!)](https://github.com/bmalbusca/ASIT/blob/master/API_project/src/README.md)
 _______
 
+- https://github.com/schmich/instascan
+- https://github.com/nimiq/qr-scanner
+
 O que falta fazer:
 
 - Error handling for 500; for new services
