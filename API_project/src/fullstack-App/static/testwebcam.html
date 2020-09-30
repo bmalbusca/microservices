@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Instascan</title>
+    <!-- ====================== JS ====================== -->
+    <script type="text/javascript" src="instascan.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- ====================== JS ====================== -->
+
+  </head>
+  <body>
+    <video id="preview"></video>
+
+    <!-- ====================== JS ====================== -->
+    <script type="text/javascript">
+      let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+      scanner.addListener('scan', function (content) {
+        console.log(content)
+        //////////////////////// a apagar - so para testar!//////////
+        /*inQR1 = "/api/secretariat/DA/Alameda"; //port:5002
+        inQR2 = "/api/room/2448131363667"; //port:5001
+        inQR = "/api/menu/17/12/2019"; //port:5003
+
+        host = "0.0.0.0";
+        public_ip = "94.63.165.239"
+        http = "https://";
+        port = "5000";*/
+        //content = http.concat(public_ip).concat(":").concat(port).concat(inQR2);
+        //////////////////////////////////////////////
+
+        //console.log(content)
+        //console.log(typeof content) // content is of type string
+        $.ajax({
+          type:"POST",
+          url:"/readQR",
+          datatype:"json",
+          crossDomain:true,
+          contentType: "application/json",
+          data: JSON.stringify(content),
+          success: function(response){
+            console.log(response);
+            //console.log(typeof(response)); //string
+          
+            function printJson(data, container, s){
+              console.log(data);
+              console.log(typeof(data));
+              var division = container.getElementById("div_a");
+              var aux = s;
+              var aux2 = "";
+              if(data instanceof Object){
+                for(var k in data){
+                  console.log("imprimir k:");
+                  console.log(k);
+                  console.log("---");
+                  if(data.hasOwnProperty(k)){
+                    var e2 = container.createElement("div");
+                    while(aux != -1){
+                      aux2 = aux2 + "\xa0";
+                      aux = aux - 1;
+                    }
+                    e2.innerHTML = aux2 + k + ":";
+                    division.appendChild(e2);
+                    printJson(data[k], container,s+1);
+                  }
+                }
+              }
+              else{
+                //not an object so here data[k] is a value! Aka we ca display it
+                // var element = document.createElement(tagName[, options]);
+                var e1 = container.createElement("div");
+                while(aux != -1){
+                  aux2 = aux2 + "\xa0";
+                  aux = aux - 1;
+                }
+                e1.innerHTML = aux2 + "\xa0\xa0>\xa0" + data;
+                division.appendChild(e1);
+              };
+            };
+            var json = $.parseJSON(response); //well-formed JSON string and returns the resulting JavaScript value.
+            printJson(json, document,1);
+          },
+          error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+          }      
+        });
+      });
+    
+     Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+          scanner.start(cameras[0]);
+        } else {
+          console.error('No cameras found.');
+        }
+      }).catch(function (e) {
+        console.error(e);
+      });
+    </script>
+    <!-- ====================== JS ====================== -->
+    
+    <p> 
+      <div id="div_a"></div>
+    </p>
+    
+  </body>
+</html>

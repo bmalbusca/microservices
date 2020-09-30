@@ -39,11 +39,16 @@ class Database(object):
             else:
                 return 404
             
-    def remove(self, name ):
-        for data in self.database["secretariats"]:
-            if name == data["name"]:
-                self.database["secretariats"].remove(data) 
-                break
+    def remove(self, name, local):
+        try:
+            for data in self.database["secretariats"]:
+                if name == data["name"] and local == data["location"]:
+                    self.database["secretariats"].remove(data) 
+                    break
+            return 200
+        except:
+            return 400 
+
     def load(self, namefile = "secretariat.json"):
         try:
             with open(namefile, "r") as jsonFile:
@@ -119,6 +124,28 @@ def insert(subpath):
         return res
     else:
         abort(404)
+
+
+
+@app.route('/remove/<path:subpath>', methods = ['GET','POST'])
+def remove(subpath):
+    
+    #We need to check if json data is correctly composed 
+    keys = str(subpath).split("/")
+    
+    if len(keys) < 2:
+        abort(404)
+    status = db.remove(keys[0],keys[1])
+    
+    if status == 200:
+        res = make_response(jsonify({"message": "Collection replaced"}), 200)
+        return res
+    elif  status == 201:
+        res = make_response(jsonify({"message": "Collection created"}), 201)
+        return res
+    else:
+        abort(404)
+
 
 
 # http://127.0.0.1:5000/DA/Alameda >> name/local
