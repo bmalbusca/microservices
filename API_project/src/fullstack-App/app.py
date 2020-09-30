@@ -582,8 +582,8 @@ def userAuthenticated():
     #first we get the secret code retuner by the FENIX login
     code = request.args['code']
     #print ("code "+request.args['code'])
-
-    push_log(logs.message('/userAuth'))
+    print("IP USERRR"+ str(request.environ.get('HTTP_X_REAL_IP', request.remote_addr)))
+    push_log(logs.message('/userAut_get_current_objecth'))
 
     # we now retrieve a fenix access token
     payload = {'client_id': client_id, 'client_secret': clientSecret, 'redirect_uri' : redirect_uri, 'code' : code, 'grant_type': 'authorization_code'}
