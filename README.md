@@ -35,6 +35,13 @@ You should have `python3` installed in your machine.
 ### Usage
 
 See the guidelines available at [API_project/src/README.md](https://github.com/bmalbusca/microservices/blob/master/API_project/src/README.md)
+
+
+###   Screenshots
+
+
+|![Admin login page](./images_ASINT/login.png)|
+| :--: | 
 _______
 
 ### References 
