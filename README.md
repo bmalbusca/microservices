@@ -69,6 +69,7 @@ _______
 
 
 - https://fenixedu.org/dev/api/#get-canteen (API canteen - Json)
+- https://www.scaler.com/topics/javascript/xml-vs-json/ (XML vs JSON)
 >
 > *@example:~*
 > ``` curl -X GET -H 'Content-Type: application/json' https://fenix.tecnico.ulisboa.pt/api/fenix/v1/canteen ```
